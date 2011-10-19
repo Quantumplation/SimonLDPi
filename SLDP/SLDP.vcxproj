@@ -89,7 +89,7 @@
     <ClCompile Include="Track.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\NIDAQmx.h" />
+    <ClInclude Include="..\include\NIDAQmx.h" />
     <ClInclude Include="..\tinyxml\tinystr.h" />
     <ClInclude Include="..\tinyxml\tinyxml.h" />
     <ClInclude Include="Edge.h" />

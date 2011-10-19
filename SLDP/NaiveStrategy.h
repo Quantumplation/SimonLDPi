@@ -7,7 +7,7 @@ namespace SLDP
 
 	class NaiveStrategy : public Strategy
 	{
-		virtual void Execute(Track* track);
+		virtual Result Execute(Track* track);
 		virtual void Destruct();
 	};
 }
