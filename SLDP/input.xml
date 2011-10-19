@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<Track>
+  <Nodes>
+    <Node label="L1" flags="NODE_TERMINAL">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="L1A" endpoint="A"/>
+    </Node>
+    <Node label="L2" flags="NODE_TERMINAL">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="L2I" endpoint="I"/>
+    </Node>
+    <Node label="L3" flags="NODE_TERMINAL">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="L3Q" endpoint="Q"/>
+    </Node>
+    <Node label="A" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="AB" endpoint="B"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="AJ" endpoint="J"/>
+    </Node>
+    <Node label="I" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="IJ" endpoint="J"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="IB" endpoint="B"/>
+    </Node>
+    <Node label="B" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="BC" endpoint="C"/>
+    </Node>
+    <Node label="J" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="JK" endpoint="K"/>
+    </Node>
+    <Node label="K" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="KL" endpoint="L"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="KS" endpoint="S"/>
+    </Node>
+    <Node label="Q" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="QR" endpoint="R"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="QL" endpoint="L"/>
+    </Node>
+    <Node label="S" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="SU" endpoint="U"/>
+    </Node>
+    <Node label="R" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="RS" endpoint="S"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="RU" endpoint="U"/>
+    </Node>
+    <Node label="L" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="LM" endpoint="M"/>
+    </Node>
+    <Node label="C" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="CD" endpoint="D"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="CF" endpoint="F"/>
+    </Node>
+    <Node label="F" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="FG" endpoint="G"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="FN" endpoint="N"/>
+    </Node>
+    <Node label="M" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="MN" endpoint="N"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="MG" endpoint="G"/>
+    </Node>
+    <Node label="G" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="GD" endpoint="D"/>
+    </Node>
+    <Node label="N" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="NO" endpoint="O"/>
+    </Node>
+    <Node label="U" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="UV" endpoint="V"/>
+    </Node>
+    <Node label="O" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="OP" endpoint="P"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="OW" endpoint="W"/>
+    </Node>
+    <Node label="V" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="VW" endpoint="W"/>
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="VP" endpoint="P"/>
+    </Node>
+    <Node label="P" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="PR2" endpoint="R2"/>
+    </Node>
+    <Node label="W" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="WR3" endpoint="R3"/>
+    </Node>
+    <Node label="D" flags="NODE_SWITCH">
+      <Edge flags="EDGE_NONE" direction="RIGHT" label="DR1" endpoint="R1"/>
+    </Node>
+    <Node label="R1" flags="NODE_TERMINAL"/>
+    <Node label="R2" flags="NODE_TERMINAL"/>
+    <Node label="R3" flags="NODE_TERMINAL"/>
+  </Nodes>
+  <Edges>
+    
+  </Edges>
+</Track>
