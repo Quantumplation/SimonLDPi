@@ -84,6 +84,7 @@
     <ClCompile Include="..\tinyxml\tinyxmlparser.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="entry.cpp" />
+    <ClCompile Include="NaiveStrategy.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Track.cpp" />
   </ItemGroup>
@@ -92,6 +93,7 @@
     <ClInclude Include="..\tinyxml\tinystr.h" />
     <ClInclude Include="..\tinyxml\tinyxml.h" />
     <ClInclude Include="Edge.h" />
+    <ClInclude Include="NaiveStrategy.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Strategy.h" />
     <ClInclude Include="Track.h" />
