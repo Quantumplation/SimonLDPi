@@ -32,13 +32,13 @@ int main()
 		while(true)
 		{
 			string input;
-			cout << "Enter an obstacle: ";
+			cout << "Enter an obstacle (letters A through H): ";
 			cin >> input;
-			if (input.size() != 1) break;
+			if (translate(input) == "") break;
 			t.getFirstEdge(translate(input))->setFlags(SLDP::EDGE_IMPASSABLE);
 		}
 		string track;
-		cout << "Starting track: ";
+		cout << "Starting track (L1, L2, L3, R1, R2, or R3: ";
 		cin >> track;
 		if (track == "l1") track = "L1";
 		if (track == "l2") track = "L2";
@@ -46,23 +46,36 @@ int main()
 		if (track == "r1") track = "R1";
 		if (track == "r2") track = "R2";
 		if (track == "r3") track = "R3";
+		if (track != "L1" && track != "L2" && track != "L3" && track != "R1" && track != "R2" && track != "R3")
+		{
+			cout << "You probably thought this was going to work.  Nope, Chuck Testa!\n";
+			track = "L1";
+		}
 		string mode;
 		cout << "Normal or Reverse? ";
 		cin >> mode;
 		SLDP::NaiveStrategy* ns;
 		if (mode == "Normal" || mode == "normal" || mode == "N" || mode == "n")	ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
-		if (mode == "Reverse" || mode == "reverse" || mode == "R" || mode == "r") ns = new SLDP::NaiveStrategy(SLDP::REVERSE, track);
+		else if (mode == "Reverse" || mode == "reverse" || mode == "R" || mode == "r") ns = new SLDP::NaiveStrategy(SLDP::REVERSE, track);
+		else
+		{
+			cout << "Fuck you, it's normal.";
+			ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
+		}
 		if (ns->Execute(&t))
 			cout << "\nNo Path\n";
 		else
 		{
 			cout << "\nSuccess!\n";
-			cout << "Switch 1: " << t.getFirstNode("A")->edgeNotDefault(SLDP::RIGHT) << endl;
-			cout << "Switch 2: " << t.getFirstNode("K")->edgeNotDefault(SLDP::RIGHT) << endl;
-			cout << "Switch 3: " << t.getFirstNode("R")->edgeNotDefault(SLDP::RIGHT) << endl;
-			cout << "Switch 4: " << t.getFirstNode("C")->edgeNotDefault(SLDP::RIGHT) << endl;
-			cout << "Switch 5: " << t.getFirstNode("F")->edgeNotDefault(SLDP::RIGHT) << endl;
-			cout << "Switch 6: " << t.getFirstNode("U")->edgeNotDefault(SLDP::LEFT) << endl;
+			for (size_t i = 0; i < 15; ++i) { cout << "X"; }
+			cout << "\nX Switch 1: " << t.getFirstNode("A")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+			cout << "X Switch 2: " << t.getFirstNode("K")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+			cout << "X Switch 3: " << t.getFirstNode("R")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+			cout << "X Switch 4: " << t.getFirstNode("C")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+			cout << "X Switch 5: " << t.getFirstNode("F")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+			cout << "X Switch 6: " << t.getFirstNode("U")->edgeNotDefault(SLDP::LEFT) << " X\n";
+			for (size_t i = 0; i < 15; ++i) { cout << "X"; }
+			cout << endl;
 		}
 	}
 	/*

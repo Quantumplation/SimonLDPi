@@ -8,9 +8,6 @@ namespace SLDP
 	class Node;
 	class Edge;
 
-	enum NodeFlags;
-	enum EdgeFlags;
-
 	class Track
 	{
 	public:
