@@ -9,6 +9,7 @@
 namespace SLDP
 {
 	class Edge;
+	class Constraint;
 	enum EdgeFlags;
 
 	enum Direction
@@ -28,6 +29,7 @@ namespace SLDP
 	class Node
 	{
 	public:
+		friend class Constraint;
 		Node() : label(""), flags(NODE_NONE) {}
 		Node(const std::string& lbl, NodeFlags flags) : label(lbl), flags(flags) {}
 
@@ -38,6 +40,7 @@ namespace SLDP
 		void setFlags(NodeFlags flag) { this->flags = flag; }
 
 		Edge* getCurrentEdge(Direction d) const;
+		int getCurrentEdgeIndex(Direction d) const;
 		bool edgeNotDefault(Direction d) const;
 
 		std::vector<Edge*> getAllEdges(Direction d) const;
@@ -50,18 +53,23 @@ namespace SLDP
 		std::vector<Edge*> getEdges() const;
 
 		void setCurrentEdge(Direction d, int index);
+		// DON'T USE
+		void _setCurrentEdge(Direction d, int index);
 		void setCurrentEdge(Direction d, const Edge& e);
 		
 		void addEdge(Edge& e, Direction d);
 		void makeEdge(Node& end, EdgeFlags flags, Direction d, const std::string& label, double weight = 1);
+
+		void addConstraint(Constraint* c);
 
 		bool removeEdge(Edge& e, Direction d);
 		bool removeEdge(Edge& e);
 		bool removeEdge(Node& n, Direction d);
 		bool removeEdge(Node& n);
 		bool removeEdge(Direction d, int num);
+	
 	private:
-
+		
 		struct Outbounds
 		{
 			Outbounds() : currentSelection(0) {}
@@ -73,5 +81,6 @@ namespace SLDP
 		std::string label;
 		NodeFlags flags;
 		std::map<Direction, Outbounds> outbounds;
+		std::vector<Constraint*> constraints;
 	};
 }

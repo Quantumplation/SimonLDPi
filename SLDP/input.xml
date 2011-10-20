@@ -11,6 +11,11 @@
       <Edge flags="EDGE_NONE" direction="RIGHT" label="L3Q" endpoint="Q"/>
     </Node>
     <Node label="A" flags="NODE_SWITCH">
+      <Constraint type="CurrentEdge" direction="RIGHT">
+        <Element direction="RIGHT" node="I"/>
+        <Element direction="LEFT" node="B"/>
+        <Element direction="LEFT" node="J"/>
+      </Constraint>
       <Edge flags="EDGE_NONE" direction="RIGHT" label="AB" endpoint="B"/>
       <Edge flags="EDGE_NONE" direction="RIGHT" label="AJ" endpoint="J"/>
     </Node>
@@ -25,6 +30,11 @@
       <Edge flags="EDGE_NONE" direction="RIGHT" label="JK" endpoint="K"/>
     </Node>
     <Node label="K" flags="NODE_SWITCH">
+      <Constraint type="CurrentEdge" direction="RIGHT">
+        <Element direction="RIGHT" node="Q"/>
+        <Element direction="LEFT" node="L"/>
+        <Element direction="LEFT" node="S"/>
+      </Constraint>
       <Edge flags="EDGE_NONE" direction="RIGHT" label="KL" endpoint="L"/>
       <Edge flags="EDGE_NONE" direction="RIGHT" label="KS" endpoint="S"/>
     </Node>
@@ -47,6 +57,11 @@
       <Edge flags="EDGE_NONE" direction="RIGHT" label="CF" endpoint="F"/>
     </Node>
     <Node label="F" flags="NODE_SWITCH">
+      <Constraint type="CurrentEdge" direction="RIGHT">
+        <Element direction="RIGHT" node="M"/>
+        <Element direction="LEFT" node="G"/>
+        <Element direction="LEFT" node="N"/>
+      </Constraint>
       <Edge flags="EDGE_NONE" direction="RIGHT" label="FG" endpoint="G"/>
       <Edge flags="EDGE_NONE" direction="RIGHT" label="FN" endpoint="N"/>
     </Node>
@@ -64,6 +79,11 @@
       <Edge flags="EDGE_NONE" direction="RIGHT" label="UV" endpoint="V"/>
     </Node>
     <Node label="O" flags="NODE_SWITCH">
+      <Constraint type="CurrentEdge" direction="RIGHT">
+        <Element direction="RIGHT" node="V"/>
+        <Element direction="LEFT" node="P"/>
+        <Element direction="LEFT" node="W"/>
+      </Constraint>
       <Edge flags="EDGE_NONE" direction="RIGHT" label="OP" endpoint="P"/>
       <Edge flags="EDGE_NONE" direction="RIGHT" label="OW" endpoint="W"/>
     </Node>
