@@ -4,9 +4,15 @@
 
 namespace SLDP
 {
+	enum Result
+	{
+		SUCCESS = 0,
+		NOPATH = 1,
+	};
+
 	class Strategy
 	{
-		virtual void Execute(Track* track) = 0;
+		virtual Result Execute(Track* track) = 0;
 		virtual void Destruct() = 0;
 	};
 }
