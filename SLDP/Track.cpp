@@ -2,6 +2,7 @@
 #include "Track.h"
 #include "Node.h"
 #include "Edge.h"
+#include "Constraint.h"
 #include "../tinyxml/tinyxml.h"
 #include "../tinyxml/tinystr.h"
 
@@ -9,7 +10,7 @@ using namespace std;
 
 namespace SLDP
 {
-		NodeFlags parseNodeFlags(const string& flag)
+	NodeFlags parseNodeFlags(const string& flag)
 	{
 		NodeFlags flags = NODE_NONE;
 		if(string::npos != flag.find("NODE_TERMINAL"))
@@ -39,6 +40,26 @@ namespace SLDP
 		if(string::npos != flag.find("EDGE_PREFERRED"))
 			flags = (EdgeFlags)(flags | EDGE_PREFERRED);
 		return flags;
+	}
+
+	Constraint* parseConstraint(TiXmlElement* elem, Track* track, Node* node)
+	{
+		if(strcmp(elem->Attribute("type"), "CurrentEdge") == 0)
+		{
+			vector<Node*> nodes;
+			vector<Direction> dirs;
+			TiXmlElement* inner;
+			nodes.push_back(node);
+			dirs.push_back(parseDirection(elem->Attribute("direction")));
+			for(inner = elem->FirstChildElement("Element"); inner; inner = inner->NextSiblingElement("Element"))
+			{
+				string label(inner->Attribute("node"));
+				Direction d = parseDirection(inner->Attribute("direction"));
+				nodes.push_back(track->getFirstNode(label));
+				dirs.push_back(d);
+			}
+			return new CurrentEdge(nodes, dirs);
+		}
 	}
 
 	vector<Node*> Track::getNodesExact(int flags) const
@@ -196,7 +217,7 @@ namespace SLDP
 		{
 			nodes.clear();
 
-			for(elem = root->FirstChildElement("Nodes")->FirstChildElement("Node"); elem; elem = elem->NextSiblingElement())
+			for(elem = root->FirstChildElement("Nodes")->FirstChildElement("Node"); elem; elem = elem->NextSiblingElement("Node"))
 			{
 				string label(elem->Attribute("label"));
 				NodeFlags flags = parseNodeFlags(elem->Attribute("flags"));
@@ -206,11 +227,11 @@ namespace SLDP
 
 		//block: Edges
 		{			
-			for(elem = root->FirstChildElement("Nodes")->FirstChildElement("Node"); elem; elem = elem->NextSiblingElement())
+			for(elem = root->FirstChildElement("Nodes")->FirstChildElement("Node"); elem; elem = elem->NextSiblingElement("Node"))
 			{
 				string nodeLabel(elem->Attribute("label"));
 				Node* node = getNodes(nodeLabel)[0];
-				for(innerElem = elem->FirstChildElement("Edge"); innerElem; innerElem = innerElem->NextSiblingElement())
+				for(innerElem = elem->FirstChildElement("Edge"); innerElem; innerElem = innerElem->NextSiblingElement("Edge"))
 				{
 					string label(innerElem->Attribute("label"));
 					EdgeFlags flags = parseEdgeFlags(innerElem->Attribute("flags"));
@@ -218,6 +239,24 @@ namespace SLDP
 					string endpointLabel(innerElem->Attribute("endpoint"));
 					Node* otherNode = getNodes(endpointLabel)[0];
 					node->makeEdge(*otherNode, flags, dir, label);
+				}
+			}
+		}
+
+		//block: Constraints
+		{
+			for(elem = root->FirstChildElement("Nodes")->FirstChildElement("Node"); elem; elem = elem->NextSiblingElement("Node"))
+			{
+				string nodeLabel(elem->Attribute("label"));
+				Node* node = getFirstNode(nodeLabel);
+				for(innerElem = elem->FirstChildElement("Constraint"); innerElem; innerElem = innerElem->NextSiblingElement("Constraint"))
+				{
+					Constraint* c = parseConstraint(innerElem, this, node);
+					vector<Node*> nodes = c->getAffectedNodes();
+					for(size_t x = 0; x < nodes.size(); ++x)
+					{
+						nodes[x]->addConstraint(c);
+					}
 				}
 			}
 		}

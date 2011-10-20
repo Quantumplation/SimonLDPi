@@ -56,7 +56,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>NIDAQmx.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\MyPrograms\SimonLDPi\lib\msvc</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib\msvc</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -92,6 +92,7 @@
     <ClInclude Include="..\include\NIDAQmx.h" />
     <ClInclude Include="..\tinyxml\tinystr.h" />
     <ClInclude Include="..\tinyxml\tinyxml.h" />
+    <ClInclude Include="Constraint.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="NaiveStrategy.h" />
     <ClInclude Include="Node.h" />

@@ -1,5 +1,6 @@
 #include "Node.h"
 #include "Edge.h"
+#include "Constraint.h"
 
 using namespace std;
 
@@ -9,6 +10,12 @@ namespace SLDP
 	{
 		Outbounds o = this->outbounds.at(d);
 		return o.edges[o.currentSelection];
+	}
+
+	int Node::getCurrentEdgeIndex(Direction d) const
+	{
+		Outbounds o = this->outbounds.at(d);
+		return o.currentSelection;
 	}
 
 	bool Node::edgeNotDefault(Direction d) const
@@ -122,6 +129,10 @@ namespace SLDP
 	void Node::setCurrentEdge(Direction d, int index)
 	{
 		outbounds.at(d).currentSelection = index;
+		for(size_t x = 0; x < constraints.size(); ++x)
+		{
+			constraints[x]->OnChange(this);
+		}
 	}
 
 	void Node::setCurrentEdge(Direction d, const Edge& edge)
@@ -130,8 +141,13 @@ namespace SLDP
 		for(size_t x = 0; x < o.edges.size(); ++x)
 		{
 			if(o.edges[x] == &edge)
-				o.currentSelection = x;
+				setCurrentEdge(d, x);
 		}
+	}
+
+	void Node::_setCurrentEdge(Direction d, int index)
+	{
+		outbounds.at(d).currentSelection = index;
 	}
 
 	void Node::addEdge(Edge& e, Direction d)
@@ -144,6 +160,11 @@ namespace SLDP
 		Edge* e = new Edge(this, &end, flags, label, weight);
 		outbounds[d].edges.push_back(e);
 		end.addEdge(*e, REVERSE(d));
+	}
+
+	void Node::addConstraint(Constraint* c)
+	{
+		constraints.push_back(c);
 	}
 
 	bool Node::removeEdge(Edge& e, Direction d)
