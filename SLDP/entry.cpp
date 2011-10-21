@@ -20,6 +20,10 @@ string translate(const string& input)
 	if (input == "F" || input == "f") return "CF";
 	if (input == "G" || input == "g") return "NO";
 	if (input == "H" || input == "h") return "RU";
+	if (input == "I" || input == "i") return "GD";
+	if (input == "J" || input == "j") return "DR1";
+	if (input == "K" || input == "k") return "PR2";
+	if (input == "L" || input == "l") return "WR3";
 	return "";
 }
 
@@ -32,21 +36,18 @@ int main()
 		while(true)
 		{
 			string input;
-			cout << "Enter an obstacle (letters A through H): ";
+			cout << "Enter an obstacle (letters A through L): ";
 			cin >> input;
 			if (translate(input) == "") break;
 			t.getFirstEdge(translate(input))->setFlags(SLDP::EDGE_IMPASSABLE);
 		}
 		string track;
-		cout << "Starting track (L1, L2, L3, R1, R2, or R3: ";
+		cout << "Starting track (1, 2, or 3): ";
 		cin >> track;
-		if (track == "l1") track = "L1";
-		if (track == "l2") track = "L2";
-		if (track == "l3") track = "L3";
-		if (track == "r1") track = "R1";
-		if (track == "r2") track = "R2";
-		if (track == "r3") track = "R3";
-		if (track != "L1" && track != "L2" && track != "L3" && track != "R1" && track != "R2" && track != "R3")
+		if (track == "1" || track == "l1") track = "L1";
+		if (track == "2" || track == "l2") track = "L2";
+		if (track == "3" || track == "l3") track = "L3";
+		if (track != "L1" && track != "L2" && track != "L3")
 		{
 			cout << "You probably thought this was going to work.  Nope, Chuck Testa!\n";
 			track = "L1";
@@ -74,6 +75,8 @@ int main()
 			cout << "X Switch 4: " << t.getFirstNode("C")->edgeNotDefault(SLDP::RIGHT) << " X\n";
 			cout << "X Switch 5: " << t.getFirstNode("F")->edgeNotDefault(SLDP::RIGHT) << " X\n";
 			cout << "X Switch 6: " << t.getFirstNode("U")->edgeNotDefault(SLDP::LEFT) << " X\n";
+			cout << "X Switch 7: " << t.getFirstNode("O")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+			cout << "X Switch 8: " << t.getFirstNode("D")->edgeNotDefault(SLDP::LEFT) << " X\n";
 			for (size_t i = 0; i < 15; ++i) { cout << "X"; }
 			cout << endl;
 		}
