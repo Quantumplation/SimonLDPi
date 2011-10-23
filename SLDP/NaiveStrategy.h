@@ -17,7 +17,6 @@ namespace SLDP
 	public:
 		NaiveStrategy(TrainMode mode, const std::string& start);
 		virtual Result Execute(Track* track);
-		virtual void Destruct();
 	private:
 		TrainMode mode;
 		std::string start;

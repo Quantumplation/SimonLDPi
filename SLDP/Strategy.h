@@ -13,6 +13,5 @@ namespace SLDP
 	class Strategy
 	{
 		virtual Result Execute(Track* track) = 0;
-		virtual void Destruct() = 0;
 	};
 }
