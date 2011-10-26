@@ -53,7 +53,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>NIDAQmx.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib\msvc</AdditionalLibraryDirectories>
@@ -82,8 +82,10 @@
     <ClCompile Include="..\tinyxml\tinyxml.cpp" />
     <ClCompile Include="..\tinyxml\tinyxmlerror.cpp" />
     <ClCompile Include="..\tinyxml\tinyxmlparser.cpp" />
+    <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="entry.cpp" />
+    <ClCompile Include="gui.cpp" />
     <ClCompile Include="NaiveStrategy.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Track.cpp" />
@@ -94,10 +96,39 @@
     <ClInclude Include="..\tinyxml\tinyxml.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="Edge.h" />
+    <ClInclude Include="Drawable.h" />
     <ClInclude Include="NaiveStrategy.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Strategy.h" />
     <ClInclude Include="Track.h" />
+    <ClInclude Include="Win32++\controls.h" />
+    <ClInclude Include="Win32++\cstring.h" />
+    <ClInclude Include="Win32++\default_resource.h" />
+    <ClInclude Include="Win32++\dialog.h" />
+    <ClInclude Include="Win32++\docking.h" />
+    <ClInclude Include="Win32++\file.h" />
+    <ClInclude Include="Win32++\frame.h" />
+    <ClInclude Include="Win32++\gdi.h" />
+    <ClInclude Include="Win32++\listview.h" />
+    <ClInclude Include="Win32++\mdi.h" />
+    <ClInclude Include="Win32++\menu.h" />
+    <ClInclude Include="Win32++\propertysheet.h" />
+    <ClInclude Include="Win32++\rebar.h" />
+    <ClInclude Include="Win32++\ribbon.h" />
+    <ClInclude Include="Win32++\shared_ptr.h" />
+    <ClInclude Include="Win32++\socket.h" />
+    <ClInclude Include="Win32++\statusbar.h" />
+    <ClInclude Include="Win32++\stdcontrols.h" />
+    <ClInclude Include="Win32++\tab.h" />
+    <ClInclude Include="Win32++\taskdialog.h" />
+    <ClInclude Include="Win32++\thread.h" />
+    <ClInclude Include="Win32++\toolbar.h" />
+    <ClInclude Include="Win32++\treeview.h" />
+    <ClInclude Include="Win32++\wceframe.h" />
+    <ClInclude Include="Win32++\wcestddef.h" />
+    <ClInclude Include="Win32++\webbrowser.h" />
+    <ClInclude Include="Win32++\wincore.h" />
+    <ClInclude Include="Win32++\winutils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="input.xml" />
