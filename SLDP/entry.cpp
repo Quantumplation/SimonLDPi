@@ -1,5 +1,5 @@
 #include "../include/NIDAQmx.h"
-
+#include "NIDAQWrapper.h"
 #include <map>
 #include <iostream> // REMOVE THIS
 #include <string>
