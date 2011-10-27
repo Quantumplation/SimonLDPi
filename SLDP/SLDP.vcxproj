@@ -82,6 +82,7 @@
     <ClCompile Include="..\tinyxml\tinyxml.cpp" />
     <ClCompile Include="..\tinyxml\tinyxmlerror.cpp" />
     <ClCompile Include="..\tinyxml\tinyxmlparser.cpp" />
+    <ClCompile Include="DijkstraStrategy.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="entry.cpp" />
     <ClCompile Include="NaiveStrategy.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="..\tinyxml\tinystr.h" />
     <ClInclude Include="..\tinyxml\tinyxml.h" />
     <ClInclude Include="Constraint.h" />
+    <ClInclude Include="DijkstraStrategy.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="NaiveStrategy.h" />
     <ClInclude Include="Node.h" />
