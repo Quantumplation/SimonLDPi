@@ -32,6 +32,7 @@ namespace SLDP
 		friend class Constraint;
 		Node() : label(""), flags(NODE_NONE) {}
 		Node(const std::string& lbl, NodeFlags flags) : label(lbl), flags(flags) {}
+		Node(const Node& n) : label(n.label), flags(n.flags), outbounds(n.outbounds.begin(), n.outbounds.end()), constraints(n.constraints.begin(), n.constraints.end()) {}
 
 		std::string getLabel() const { return label; }
 		NodeFlags getFlags() const { return flags; }

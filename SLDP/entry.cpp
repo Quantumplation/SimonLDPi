@@ -1,6 +1,7 @@
 #include "../include/NIDAQmx.h"
 
 #include <map>
+#include <climits>
 #include <iostream> // REMOVE THIS
 #include <string>
 #include <vector>
@@ -8,6 +9,7 @@
 #include "Edge.h"
 #include "Node.h"
 #include "NaiveStrategy.h"
+#include "DijkstraStrategy.h"
 using namespace std;
 
 string translate(const string& input)
@@ -40,6 +42,7 @@ int main()
 			cin >> input;
 			if (translate(input) == "") break;
 			t.getFirstEdge(translate(input))->setFlags(SLDP::EDGE_IMPASSABLE);
+			t.getFirstEdge(translate(input))->setWeight(numeric_limits<double>::max());
 		}
 		string track;
 		cout << "Starting track (1, 2, or 3): ";
@@ -55,31 +58,38 @@ int main()
 		string mode;
 		cout << "Normal or Reverse? ";
 		cin >> mode;
-		SLDP::NaiveStrategy* ns;
-		if (mode == "Normal" || mode == "normal" || mode == "N" || mode == "n")	ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
-		else if (mode == "Reverse" || mode == "reverse" || mode == "R" || mode == "r") ns = new SLDP::NaiveStrategy(SLDP::REVERSE, track);
-		else
-		{
-			cout << "Fuck you, it's normal.";
-			ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
-		}
-		if (ns->Execute(&t))
-			cout << "\nNo Path\n";
-		else
-		{
-			cout << "\nSuccess!\n";
-			for (size_t i = 0; i < 15; ++i) { cout << "X"; }
-			cout << "\nX Switch 1: " << t.getFirstNode("A")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-			cout << "X Switch 2: " << t.getFirstNode("K")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-			cout << "X Switch 3: " << t.getFirstNode("R")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-			cout << "X Switch 4: " << t.getFirstNode("C")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-			cout << "X Switch 5: " << t.getFirstNode("F")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-			cout << "X Switch 6: " << t.getFirstNode("U")->edgeNotDefault(SLDP::LEFT) << " X\n";
-			cout << "X Switch 7: " << t.getFirstNode("O")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-			cout << "X Switch 8: " << t.getFirstNode("D")->edgeNotDefault(SLDP::LEFT) << " X\n";
-			for (size_t i = 0; i < 15; ++i) { cout << "X"; }
-			cout << endl;
-		}
+		vector<string> ends;
+		ends.push_back("R1");
+		ends.push_back("R2");
+		ends.push_back("R3");
+		SLDP::DijkstraStrategy ds(track, ends);
+		ds.Execute(&t);
+
+		//SLDP::NaiveStrategy* ns;
+		//if (mode == "Normal" || mode == "normal" || mode == "N" || mode == "n")	ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
+		//else if (mode == "Reverse" || mode == "reverse" || mode == "R" || mode == "r") ns = new SLDP::NaiveStrategy(SLDP::REVERSE, track);
+		//else
+		//{
+		//	cout << "Fuck you, it's normal.";
+		//	ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
+		//}
+		//if (ns->Execute(&t))
+		//	cout << "\nNo Path\n";
+		//else
+		//{
+		//	cout << "\nSuccess!\n";
+		//	for (size_t i = 0; i < 15; ++i) { cout << "X"; }
+		//	cout << "\nX Switch 1: " << t.getFirstNode("A")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		//	cout << "X Switch 2: " << t.getFirstNode("K")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		//	cout << "X Switch 3: " << t.getFirstNode("R")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		//	cout << "X Switch 4: " << t.getFirstNode("C")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		//	cout << "X Switch 5: " << t.getFirstNode("F")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		//	cout << "X Switch 6: " << t.getFirstNode("U")->edgeNotDefault(SLDP::LEFT) << " X\n";
+		//	cout << "X Switch 7: " << t.getFirstNode("O")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		//	cout << "X Switch 8: " << t.getFirstNode("D")->edgeNotDefault(SLDP::LEFT) << " X\n";
+		//	for (size_t i = 0; i < 15; ++i) { cout << "X"; }
+		//	cout << endl;
+		//}
 	}
 	/*
 	map<string, bool> vars;

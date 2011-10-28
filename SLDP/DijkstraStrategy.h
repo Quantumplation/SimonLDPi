@@ -10,7 +10,7 @@ namespace SLDP
 		DijkstraDecorator(const T& original) : T(original) {}
 
 		int accumulatedCost;
-		DNode* previous;
+		DijkstraDecorator<T>* previous;
 	private:
 	};
 
