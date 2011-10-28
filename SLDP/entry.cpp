@@ -106,5 +106,9 @@ int main()
 	track.getNodes("S1")->setDestination("S3");
 	track.getNodes("S2")->setDestination("S4");
 	*/
+
+	int test;
+	cin >> test;
+
 	return 0;
 }
