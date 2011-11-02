@@ -42,12 +42,11 @@ int main()
 		t.getFirstEdge(translate(input))->setFlags(SLDP::EDGE_IMPASSABLE);
 	}
 	string track;
-	cout << "Starting track (1, 2, or 3): ";
+	cout << "Starting track (L1, L2, L3, R1, R2, or R3): ";
 	cin >> track;
-	if (track == "1" || track == "l1") track = "L1";
-	if (track == "2" || track == "l2") track = "L2";
-	if (track == "3" || track == "l3") track = "L3";
-	if (track != "L1" && track != "L2" && track != "L3")
+	if (track[0] == 'l') track[0] = 'L';
+	if (track[0] == 'r') track[0] = 'R';
+	if ((track[0] != 'L' && track[0] != 'R') || (track[1] != '1' && track[1] != '2' && track[1] != '3'))
 	{
 		cout << "You probably thought this was going to work.  Nope, Chuck Testa!\n";
 		track = "L1";
@@ -80,10 +79,5 @@ int main()
 		for (size_t i = 0; i < 15; ++i) { cout << "X"; }
 		cout << endl;
 	}
-
-	cout << "Program ended." << endl;
-	int test;
-	cin >> test;
-
 	return 0;
 }

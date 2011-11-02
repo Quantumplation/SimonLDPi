@@ -85,10 +85,13 @@
     <ClCompile Include="..\tinyxml\tinyxml.cpp" />
     <ClCompile Include="..\tinyxml\tinyxmlerror.cpp" />
     <ClCompile Include="..\tinyxml\tinyxmlparser.cpp" />
-    <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="GUIBase.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="entry.cpp" />
-    <ClCompile Include="gui.cpp" />
+    <ClCompile Include="GUIEdge.cpp" />
+    <ClCompile Include="GUITrack.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GUINode.cpp" />
     <ClCompile Include="NaiveStrategy.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Track.cpp" />
@@ -99,7 +102,10 @@
     <ClInclude Include="..\tinyxml\tinyxml.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="Edge.h" />
-    <ClInclude Include="Drawable.h" />
+    <ClInclude Include="GUIBase.h" />
+    <ClInclude Include="GUIEdge.h" />
+    <ClInclude Include="GUINode.h" />
+    <ClInclude Include="GUITrack.h" />
     <ClInclude Include="NaiveStrategy.h" />
     <ClInclude Include="NIDAQWrapper.h" />
     <ClInclude Include="Node.h" />
