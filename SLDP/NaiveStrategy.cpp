@@ -88,7 +88,7 @@ namespace SLDP
 			{
 				track->getFirstNode("A")->setCurrentEdge(RIGHT, B || (C && D) || (K && L) );
 				track->getFirstNode("K")->setCurrentEdge(RIGHT, !D);
-				track->getFirstNode("C")->setCurrentEdge(RIGHT, E);
+				track->getFirstNode("C")->setCurrentEdge(RIGHT, E || J);
 				track->getFirstNode("F")->setCurrentEdge(RIGHT,
 					(track->getFirstNode("A")->edgeNotDefault(RIGHT) && (I || J) )
 					|| (!track->getFirstNode("A")->edgeNotDefault(RIGHT) && G) );
