@@ -1,24 +1,37 @@
-#include <vector>
+#include <string>
 #include "Win32++\WinCore.h"
 #include "GUIBase.h"
 using namespace std;
 
 namespace SLDP
 {
-	GUIBase::GUIBase() : wRadius(0), hRadius(0), deleteThis(false)
+	GUIBase::GUIBase() : wRadius(0), hRadius(0), deleteThis(false),
+		relabeling(false), label(new wchar_t[10]), labelSize(0)
 	{
 		mask.left = 0;
 		mask.right = 0;
 		mask.top = 0;
 		mask.bottom = 0;
 	}
-	GUIBase::GUIBase(long x = 320, long y = 240, long width = 16, long height = 16)
-		: wRadius(width / 2), hRadius(height / 2), deleteThis(false)
+	GUIBase::GUIBase(long x, long y, long width, long height)
+		: wRadius(width / 2), hRadius(height / 2), deleteThis(false),
+		  relabeling(false), label(new wchar_t[10]), labelSize(0)
 	{
 		mask.left = x;
 		mask.right = x + width;
 		mask.top = y;
 		mask.bottom = y + height;
+		label[0] = '\0';
+	}
+	GUIBase::GUIBase(long x, long y, long width, long height, const string& newLabel)
+		: wRadius(width / 2), hRadius(height / 2), deleteThis(false),
+		relabeling(false), label(new wchar_t[10])
+	{
+		mask.left = x;
+		mask.right = x + width;
+		mask.top = y;
+		mask.bottom = y + height;
+		setLabel(newLabel);
 	}
 	bool GUIBase::contains(POINT p) const
 	{
@@ -42,6 +55,51 @@ namespace SLDP
 	void GUIBase::setLocation(POINT p)
 	{
 		setLocation(p.x, p.y);
+	}
+	string GUIBase::getLabel() const
+	{
+		string result = "";
+		for (size_t i = 0; i < labelSize; ++i)
+			result += (char)label[i];
+		return result;
+	}
+	void GUIBase::setLabel(const string& newLabel)
+	{
+		const char* toConvert = newLabel.c_str();
+		labelSize = newLabel.size();
+		for (size_t i = 0; i < labelSize; ++i)
+			label[i] = (wchar_t)toConvert[i];
+		relabeling = false;
+		label[labelSize] = '\0';
+	}
+	void GUIBase::setBeingRelabeled(bool relabeled)
+	{
+		relabeling = relabeled;
+		if (relabeled) label[labelSize] = '|';
+		else label[labelSize] = '\0';
+	}
+	void GUIBase::addCharToLabel(wchar_t newChar)
+	{
+		if (labelSize > 9) return;
+		else
+		{
+			label[labelSize++] = newChar;
+			label[labelSize] = '|';
+		}
+	}
+	void GUIBase::removeCharFromLabel()
+	{
+		if (labelSize < 1) return;
+		else
+			label[--labelSize] = '|';
+	}
+
+	void GUIBase::drawLabel(CDC context, long shiftX, long shiftY) const
+	{
+		if (relabeling)
+			context.TextOutW(getX() - labelSize * 4 + shiftX, getY() + shiftY, label, labelSize + 1);
+		else
+			context.TextOutW(getX() - labelSize * 4 + shiftX, getY() + shiftY, label);
 	}
 	void GUIBase::markForDeletion()
 	{

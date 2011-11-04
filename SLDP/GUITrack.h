@@ -14,6 +14,8 @@ namespace SLDP
 		void rightReleased(POINT p);
 		void removeDeletedElements();
 		void labelNode (const std::string& label);
+		GUINode* addNode(GUINode* node) { nodes.push_back(node); return node;}
+		void addEdge(GUIEdge* edge) { edges.push_back(edge); }
 		void draw(CDC context) const;
 		void loadFromFile(const std::string& filename);
 		void saveToFile(const std::string& filename);

@@ -26,11 +26,13 @@ string translate(const string& input)
 	if (input == "J" || input == "j") return "DR1";
 	if (input == "K" || input == "k") return "PR2";
 	if (input == "L" || input == "l") return "WR3";
+	if (input == "NIDAQ") return "NIDAQ";
 	return "";
 }
 
 int main()
 {
+	bool NIDAQ = false;
 	SLDP::Track t;
 	t.loadFromFile("input.xml");
 	while(true)
@@ -39,7 +41,16 @@ int main()
 		cout << "Enter an obstacle (letters A through L): ";
 		cin >> input;
 		if (translate(input) == "") break;
+		if (translate(input) == "NIDAQ")
+		{
+			NIDAQ = true;
+			break;
+		}
 		t.getFirstEdge(translate(input))->setFlags(SLDP::EDGE_IMPASSABLE);
+	}
+	if (NIDAQ)
+	{
+
 	}
 	string track;
 	cout << "Starting track (L1, L2, L3, R1, R2, or R3): ";
