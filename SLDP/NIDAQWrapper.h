@@ -1,6 +1,6 @@
 #pragma once
-
-#include "../include/NIDAQmx.h"
+#include "../include/curses.h"
+#include "../NIDAQInterface/src/nidaq.h"
 #include "Track.h"
 #include <windows.h>
 #include <iostream>
@@ -8,10 +8,65 @@
 #include <sstream>
 #include <string>
 
-#define DAQmxErrChk(functionCall) if( DAQmxFailed(error=(functionCall)) ){std::cout << "Error: " << error << std::endl;	char errBuff[2048] = {'\0'}; DAQmxGetExtendedErrorInfo(errBuff, 2048); std::cout << "Extended err: " << errBuff << std::endl; return;}
-
 namespace SLDP
 {
+
+	int32 CVICALLBACK EveryNCallback(TaskHandle taskHandle, int32 everyNsamplesEventType, uInt32 nSamples, void *callbackData)
+	{
+		int32       error=0;
+		char        errBuff[2048]={'\0'};
+		static int  totalRead=0;
+		int32       read=0;
+		float64     data[120];
+
+		/*********************************************/
+		// DAQmx Read Code
+		/*********************************************/
+		if(DAQmxFailed(error = DAQmxReadAnalogF64(taskHandle,10,1.0,DAQmx_Val_GroupByChannel,data,nSamples*12,&read,NULL)))
+		{
+			std::cout << "Error: " << error << std::endl;	
+			char errBuff[2048] = {'\0'}; 
+			DAQmxGetExtendedErrorInfo(errBuff, 2048); 
+			std::cout << "Extended err: " << errBuff << std::endl; 
+			return -1;
+		}
+		if( read>0 ) 
+		{
+	/*		system("cls");
+			printf("+-----------------------------------------------------------------------+\n"
+				   "|A:\t%f\tB:\t%f\tC:\t%f\t|\n"
+				   "|D:\t%f\tE:\t%f\tF:\t%f\t|\n"
+				   "|G:\t%f\tH:\t%f\tI:\t%f\t|\n"
+				   "|J:\t%f\tK:\t%f\tL:\t%f\t|\n"
+				   "+-----------------------------------------------------------------------+\n",
+				   data[0], data[10], data[20],
+				   data[30], data[40], data[50],
+				   data[60], data[70], data[80],
+				   data[90], data[100],data[110]);
+			fflush(stdout);
+		*/}
+		return 0;
+	}
+
+	int32 CVICALLBACK DoneCallback(TaskHandle taskHandle, int32 status, void *callbackData)
+	{
+		return 0;
+	}
+
+	const char track[] = {
+		' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','4',' ',' ','E',' ',' ',' ',' ',' ',' ',' ',' ',' ','8',' ',' ','J','\n',
+		' ',' ',' ',' ',' ',' ',' ',' ',' ',(char)190,(char)187,(char)176,(char)176,(char)177,(char)208,(char)176,(char)176,(char)193,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)209,(char)180,(char)176,(char)192,(char)176,'R','1','\n',
+		' ',' ',' ',' ','1',' ',' ','A',(char)190,(char)181,(char)188,' ',' ',(char)191,(char)182,(char)189,' ','F',' ','5',' ',' ',' ',' ','I',' ',(char)190,(char)181,(char)188,'\n',
+		'L','1', (char)176, (char)177,(char)213,(char)180,(char)176,(char)192,(char)186,(char)188,' ',' ',' ',' ',(char)191,(char)185,(char)176,(char)192,(char)177,(char)213,(char)180,(char)176,(char)176,(char)176,(char)192,(char)176,(char)186,(char)188,'\n',
+		' ',' ',' ',(char)195,(char)183,(char)197,' ','B',' ',' ','2',' ',' ','C',' ',' ',' ',' ',(char)195,(char)183,(char)197,' ','G',' ',' ','7',' ',' ',' ',' ','K','\n',
+		'L','2',(char)176,(char)179,(char)211,(char)178,(char)176,(char)193,(char)176,(char)177,(char)213,(char)180,(char)176,(char)192,(char)176,(char)176,(char)176,(char)176,(char)179,(char)211,(char)178,(char)176,(char)192,(char)176,(char)177,(char)213,(char)180,(char)176,(char)176,(char)176,(char)192,(char)176,'R', '2','\n',
+		' ',' ',' ',' ',' ',' ',' ',' ',' ',(char)195,(char)183,(char)197,' ','D',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',(char)195,(char)183,(char)197,'\n',
+		' ',' ',' ',' ',(char)190,(char)187,(char)176,(char)176,(char)176,(char)179,(char)215,(char)216,(char)176,(char)192,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)209,(char)180,(char)179,(char)211,(char)178,(char)176,(char)184,(char)189,'L','\n',
+		' ',' ',' ',(char)190,(char)181,(char)188,' ',' ',' ','3',(char)191,(char)182,(char)189,' ',' ',' ',' ',' ',' ',' ','H',(char)190,(char)181,(char)188,'6',' ',' ',' ',(char)191,(char)217,(char)189,'\n',
+		'L','3',(char)176,(char)186,(char)188,' ',' ',' ',' ',' ',' ',(char)191,(char)185,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)176,(char)192,(char)186,(char)188,' ',' ',' ',' ',' ',' ',(char)191,(char)185,(char)176,'R','3','\n',
+		'\0'
+	};
+
 	class NIDAQWrapper
 	{
 	public:
@@ -19,54 +74,32 @@ namespace SLDP
 
 		void Initialize()
 		{
-			int error = 0;
-			std::cout << "A" << std::endl;
-			std::stringstream s;
-			for(int x = 0; x < 8; x++)
+			initscr();
+
+			// Setup our read channel
+			readHandle = GetTask("readTask");
+			for(int x = 0; x < 12; x++)
 			{
-				s.clear();
-				readHandles.push_back(TaskHandle());
-				s << "read" << x;
-				DAQmxErrChk(DAQmxCreateTask(s.str().c_str(), &readHandles.back()));
-				s.clear();
-				s << "Dev1/ai/" << x;
-				DAQmxErrChk(DAQmxCreateAIVoltageChan(readHandles.back(), s.str().c_str(), "Voltage_0", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				DAQmxErrChk(DAQmxCfgSampClkTiming(readHandles.back(), "", 1000.0, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, 100));
-				DAQmxErrChk(DAQmxStartTask(readHandles.back()));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai1", "Voltage_1", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai2", "Voltage_2", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai3", "Voltage_3", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai4", "Voltage_4", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai5", "Voltage_5", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai6", "Voltage_6", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai7", "Voltage_7", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai8", "Voltage_8", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai9", "Voltage_9", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai10", "Voltage_10", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
-				//DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, "Dev1/ai11", "Voltage_11", DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
+				std::stringstream s;
+				std::string name;
+				s << "Voltage_" << x;
+				s >> name;
+				GetReadChannel(readHandle, name.c_str(), x);
 			}
 
-			for(int x = 0; x < 2; x++)
-			{
-				s.clear();
-				s << "write" << x;
-				writeHandles.push_back(TaskHandle());
-				DAQmxErrChk(DAQmxCreateTask(s.str().c_str(), &writeHandles.back()));
-				s.clear();
-				s << "Dev1/port" << x << "/line0:7";
-				DAQmxErrChk(DAQmxCreateDOChan(writeHandles.back(), s.str().c_str(), "", DAQmx_Val_ChanForAllLines));
-				DAQmxErrChk(DAQmxCfgSampClkTiming(readHandles.back(), "", 1000.0, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, 100));
-				DAQmxErrChk(DAQmxStartTask(writeHandles.back()));
-			}
-			
-			if(error == 0)
-				std::cout << "Success!" << std::endl;
-			else
-			{
-				char errBuff[2048] = {'\0'};
-				DAQmxGetExtendedErrorInfo(errBuff, 2048);
-				std::cout << "Extended err: " << errBuff << std::endl;
-			}
+			//StartTask(readHandle, EveryNCallback);
+
+			// Setup our write channels
+			writeHandles.push_back(TaskHandle());
+			writeHandles[0] = GetTask("write0");
+			GetWriteChannel(writeHandles[0], "DigitalOut_0", 0);
+			writeHandles.push_back(TaskHandle());
+			writeHandles[1] = GetTask("write1");
+			GetWriteChannel(writeHandles[1], "DigitalOut_1", 1);
+
+			StartTask(writeHandles[0]);
+			StartTask(writeHandles[1]);
+
 			return;
 		}
 
@@ -78,22 +111,22 @@ namespace SLDP
 		{
 		}
 
-		void DisplayValues()
+/*		void DisplayValues()
 		{
 			int error = 0;
 			int32 numRead = 0;
 			float64 readArray[11000] = {0};
 			while(true)
 			{
-				DAQmxErrChk(DAQmxReadAnalogF64(readHandles[0], DAQmx_Val_Auto, 5, DAQmx_Val_GroupByChannel, readArray, 11000, &numRead, NULL));
-				std::cout << "CHAN 1:" << readArray[0];
+				DAQmxErrChk(DAQmxReadAnalogF64(readHandle, DAQmx_Val_Auto, 5, DAQmx_Val_GroupByChannel, readArray, 11000, &numRead, NULL));
+				std::cout << "CHAN 1:" << readArray[0] << " read: " << numRead;
 				std::string test;
 				std::cin >> test;
 				if(test == "e")
 					break;
 			}
 		}
-
+		*/
 		void WriteSwitches()
 		{
 /*			int error=0;
@@ -118,31 +151,38 @@ namespace SLDP
 
 		void PulseSwitch(int Sector, bool Cross)
 		{
-			int error = 0;
-			uInt8 data[8] = {0};
-			data[Sector%4+Cross] = 0;
-			uInt8 off[8] = {0};
+			if(Sector < 0 || Sector > 8)
+				return;
 			int port = Sector > 4;
-			DAQmxErrChk(DAQmxWriteDigitalLines(writeHandles[port], 1,1,10.0,DAQmx_Val_GroupByChannel, data, NULL, NULL));
-			Sleep(25);
-			DAQmxErrChk(DAQmxWriteDigitalLines(writeHandles[port], 1,1,10.0,DAQmx_Val_GroupByChannel,off, NULL, NULL));
+			int channel = ((Sector-1)%4)*2 + Cross;
+			Pulse(writeHandles[port], port, channel);
 		}
 
 		void Destroy()
 		{
-			while(true)
-			{
-				int error;
-				for(int x = 0; x < readHandles.size(); x++)
-				{
-					if(readHandles[x] != 0)
-						DAQmxErrChk(DAQmxStopTask(readHandles[x]));
-				}
-				break;
-			}
+			FreeTask(readHandle);
+			FreeTask(writeHandles[0]);
+			FreeTask(writeHandles[1]);
+		}
+
+		void printConsole()
+		{
+			
+		}
+
+		~NIDAQWrapper()
+		{
+			Destroy();
 		}
 	private:
-		std::vector<TaskHandle> readHandles;
+		TaskHandle readHandle;
 		std::vector<TaskHandle> writeHandles;
+
+		int values[12];
+
+		WINDOW* wSwitches;
+		WINDOW* wSensors;
+		WINDOW* wLog;
+		WINDOW* wTrack;
 	};
 }
