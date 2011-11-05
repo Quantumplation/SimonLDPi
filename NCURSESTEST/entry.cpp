@@ -34,24 +34,25 @@ int CALLBACK WinMain( __in  HINSTANCE hInstance, __in  HINSTANCE hPrevInstance, 
 
     /* Create a drawing window */
 
-    winSensors = newwin(10, 33, 0, 0);
+	winSwitch = newwin(10,33,0,0);
+	winSensors = newwin(5,66,20,0);
 	winLog = newwin(5, 66, 25-5, 0);
-	winSwitch = newwin(10,33,0,33);
 	winTrack = newwin(10, 40, 10, 15);
 
-    if (winSensors == NULL || winLog == NULL || winSwitch == NULL || winTrack == NULL)
-    {
-        endwin();
-        return 1;
-    }
+
+	if (winSensors == NULL || winLog == NULL || winSwitch == NULL || winTrack == NULL)
+	{
+		endwin();
+		return 1;
+	}
     
 	init_pair(1, COLOR_WHITE, COLOR_BLUE);
 	init_pair(2, COLOR_BLACK, COLOR_RED);
 	init_pair(3, COLOR_BLUE, COLOR_WHITE);
-    wbkgd(winSensors, COLOR_PAIR(1));
+	wbkgd(winSensors, COLOR_PAIR(1));
 	wbkgd(winLog, COLOR_PAIR(2));
 	wbkgd(winSwitch, COLOR_PAIR(1));
-    werase(winSensors);
+	werase(winSensors);
 	werase(winLog);
 	werase(winSwitch);
 	werase(winTrack);
@@ -73,17 +74,17 @@ int CALLBACK WinMain( __in  HINSTANCE hInstance, __in  HINSTANCE hPrevInstance, 
 
 	init_pair(7, COLOR_WHITE, COLOR_RED);
 	wattrset(winLog, COLOR_PAIR(7));
-	mvwaddstr(winLog, 1, 1, "Acquiring Read Channel Dev1/ai0 with name Voltage_0...");
+	mvwaddstr(winLog, 1, 1, "Acquiring chan Dev1/ai0 named Voltage_0...");
 	mvwaddstr(winLog, 2, 1, "Setting timer...");
 	mvwaddstr(winLog, 3, 1, "Registering continuous sample callbacks...");
 
 	wattrset(winSensors, COLOR_PAIR(1));
-	mvwaddstr(winSensors, 2, 2, "A:    -1.0000");	mvwaddstr(winSensors, 2, 18, "B:    -1.0000");
-	mvwaddstr(winSensors, 3, 2, "C:    -1.0000");	mvwaddstr(winSensors, 3, 18, "D:    -1.0000");
-	mvwaddstr(winSensors, 4, 2, "E:    -1.0000");	mvwaddstr(winSensors, 4, 18, "F:    -1.0000");
-	mvwaddstr(winSensors, 5, 2, "G:    -1.0000");	mvwaddstr(winSensors, 5, 18, "H:    -1.0000");
-	mvwaddstr(winSensors, 6, 2, "I:    -1.0000");	mvwaddstr(winSensors, 6, 18, "J:    -1.0000");
-	mvwaddstr(winSensors, 7, 2, "K:    -1.0000");	mvwaddstr(winSensors, 7, 18, "L:    -1.0000");
+	mvwaddstr(winSensors, 2, 2, "A:");	mvwaddstr(winSensors, 2, 18, "B:");
+	mvwaddstr(winSensors, 3, 2, "C:");	mvwaddstr(winSensors, 3, 18, "D:");
+	mvwaddstr(winSensors, 4, 2, "E:");	mvwaddstr(winSensors, 4, 18, "F:");
+	mvwaddstr(winSensors, 5, 2, "G:");	mvwaddstr(winSensors, 5, 18, "H:");
+	mvwaddstr(winSensors, 6, 2, "I:");	mvwaddstr(winSensors, 6, 18, "J:");
+	mvwaddstr(winSensors, 7, 2, "K:");	mvwaddstr(winSensors, 7, 18, "L:");
 
 	wattrset(winSwitch, COLOR_PAIR(1));
 	mvwaddstr(winSwitch, 3, 2, "1:   Cross");	mvwaddstr(winSwitch, 3, 17, "2:   Cross");

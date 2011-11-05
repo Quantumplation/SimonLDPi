@@ -27,7 +27,6 @@ NDAPI void StartTask(TaskHandle handle, DAQmxEveryNSamplesEventCallbackPtr callb
 {
 	int error;
 
-	
 	if(callback)
 	{
 		print(w,"Setting timer...");

@@ -75,6 +75,13 @@ namespace SLDP
 		void Initialize()
 		{
 			initscr();
+			resize_term(25, 66);
+			start_color();
+			cbreak();
+			noecho();
+			curs_set(0);
+			noecho();
+			refresh();
 
 			// Setup our read channel
 			readHandle = GetTask("readTask");
@@ -87,7 +94,7 @@ namespace SLDP
 				GetReadChannel(readHandle, name.c_str(), x);
 			}
 
-			//StartTask(readHandle, EveryNCallback);
+			StartTask(readHandle, EveryNCallback);
 
 			// Setup our write channels
 			writeHandles.push_back(TaskHandle());
