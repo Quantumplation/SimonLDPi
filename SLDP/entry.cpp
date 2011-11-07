@@ -12,6 +12,9 @@
 #include "../include/curses.h"
 using namespace std;
 
+#define PHYSICAL &t
+#define YOUR_BODY_TALK &t
+
 string translate(const string& input)
 {
 	if (input == "A" || input == "a") return "BC";
@@ -26,14 +29,15 @@ string translate(const string& input)
 	if (input == "J" || input == "j") return "DR1";
 	if (input == "K" || input == "k") return "PR2";
 	if (input == "L" || input == "l") return "WR3";
-	if (input == "NIDAQ") return "NIDAQ";
+	if (input == "NIDAQ" || input == "nidaq") return "NIDAQ";
 	return "";
 }
 
 int main()
 {
-	SLDP::NIDAQWrapper wrapper;
-	wrapper.Initialize();
+	SLDP::NIDAQWrapper lets;
+	SLDP::NIDAQWrapper* let = &lets;
+	lets.Initialize();
 
 	bool NIDAQ = false;
 	SLDP::Track t;
@@ -53,7 +57,12 @@ int main()
 	}
 	if (NIDAQ)
 	{
-
+		string s;
+		cout << "Press enter to lock in the values..." << endl;
+		getline(cin, s);
+		getline(cin, s);
+		lets.GetPhysical(PHYSICAL);
+		lets.frozen = true;
 	}
 	string track;
 	cout << "Starting track (L1, L2, L3, R1, R2, or R3): ";
@@ -92,6 +101,10 @@ int main()
 		cout << "X Switch 8: " << t.getFirstNode("D")->edgeNotDefault(SLDP::LEFT) << " X\n";
 		for (size_t i = 0; i < 15; ++i) { cout << "X"; }
 		cout << endl;
+		let->MeHearYourBodyTalk(YOUR_BODY_TALK);
+		let->frozen = false;
 	}
+	string s;
+	cin >> s;
 	return 0;
 }

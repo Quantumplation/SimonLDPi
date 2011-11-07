@@ -115,7 +115,7 @@ NDAPI void Pulse(TaskHandle handle, unsigned port, unsigned chan, WINDOW* w)
 		return;
 	}
 	int error;
-	uInt8 data[8] = {0};
+	uInt8 data[8] = {0,0,0,0,0,0,0,0};
 	data[chan] = 1;
 	uInt8 off[8] = {0};
 	// Watchdog Timer
@@ -130,9 +130,12 @@ NDAPI void Pulse(TaskHandle handle, unsigned port, unsigned chan, WINDOW* w)
 	//print(w, "Creating watchdog task with a timeout of 25ms.  This guarentees pulse completion...");
 	//DAQmxErrChkVoid(DAQmxStartTask(wd));
 	print(w, "Pulsing 1...");
-	DAQmxErrChkVoid(DAQmxWriteDigitalLines(handle, 1,1,10.0,DAQmx_Val_GroupByChannel, data, NULL, NULL));
+	printf("Pulsing 1 on port %d line %d", port, chan);
+	int32 numSampsWritten;
+	DAQmxErrChkVoid(DAQmxWriteDigitalLines(handle, 1,1,10.0,DAQmx_Val_GroupByChannel, data, &numSampsWritten, NULL));
 	Sys_Sleep(10);
 	print(w, "Pulsing 0...");
+	printf("Pulsing 0 on port %d line %d", port, chan);
 	DAQmxErrChkVoid(DAQmxWriteDigitalLines(handle, 1,1,10.0,DAQmx_Val_GroupByChannel, off, NULL, NULL));
 	//FreeTask(wd, w);
 	time(&lastPulse[port*8+chan]);

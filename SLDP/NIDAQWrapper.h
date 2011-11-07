@@ -27,51 +27,13 @@ namespace SLDP
 	class NIDAQWrapper
 	{
 	public:
-		NIDAQWrapper() : winSwitch(NULL), winSensors(NULL), winLog(NULL), winLogBox(NULL), winTrack(NULL) {}
+		NIDAQWrapper() : winSwitch(NULL), winSensors(NULL), winLog(NULL), winLogBox(NULL), winTrack(NULL), frozen(false) {}
 
 		void BuildUI();
 		void Initialize();
 
-		//void ReadTo(Track* track);
-		//void WriteFrom(Track* track);
-
-/*		void DisplayValues()
-		{
-			int error = 0;
-			int32 numRead = 0;
-			float64 readArray[11000] = {0};
-			while(true)
-			{
-				DAQmxErrChk(DAQmxReadAnalogF64(readHandle, DAQmx_Val_Auto, 5, DAQmx_Val_GroupByChannel, readArray, 11000, &numRead, NULL));
-				std::cout << "CHAN 1:" << readArray[0] << " read: " << numRead;
-				std::string test;
-				std::cin >> test;
-				if(test == "e")
-					break;
-			}
-		}
-		*/
-/*		void WriteSwitches()
-		{
-			int error=0;
-			uInt8 data[16]={0,0,0,0,0,0,0,0,
-							0,0,0,0,0,0,0,0};
-			for(int x = 0; x < 8; x++)
-			{
-				DAQmxErrChk(DAQmxWriteDigitalLines(handle, 1,1,10.0,DAQmx_Val_GroupByChannel,data, NULL, NULL));
-				data[x] = 1;
-				std::string wait;
-				std::cin >> wait;
-			}
-			if(error == 0)
-				std::cout << "Success!" << std::endl;
-			else
-			{
-				char errBuff[2048] = {'\0'};
-				DAQmxGetExtendedErrorInfo(errBuff, 2048);
-				std::cout << errBuff << std::endl;
-			}
-		}*/
+		void GetPhysical(Track* track); // GET PHYSICAL, PHYSICAL
+		void MeHearYourBodyTalk(Track* track);
 
 		void PulseSwitch(int Sector, bool Cross);
 
@@ -81,10 +43,6 @@ namespace SLDP
 			for(int x = 0; x < 12; x++)
 			{
 				mvwprintw(winSensors, x/4+2, (x%4)*5 + 3, values[x] > 4 ? "Y" : "N");
-				if(x < 8)
-				{
-					PulseSwitch(x, values[x] > 4);
-				}
 			}
 			char open[] = {(char)(192), '\0', (char)(193), '\0', (char)(217), '\0', (char)(218), '\0'};
 			mvwprintw(winTrack, 3, 7, open + (values[0]>4)*2);   // A
@@ -102,34 +60,34 @@ namespace SLDP
 
 			for(int x = 0; x < 8; x++)
 			{
-				mvwprintw(winSwitch, x/3+2, (x%3)*7+3, switches[x] ? "X" : "S");
+				mvwprintw(winSwitch, (x/3)+2, (x%3)*7+3, switches[x] ? "X" : "S");
 			}
 			char cross[] = {(char)177, '\0', (char)178, '\0', (char)179, '\0', (char)180, '\0', (char)216, '\0', (char)215, '\0'};
 			char straight[] = {(char)203, '\0', (char)204, '\0', (char)205, '\0', (char)206, '\0', (char)219, '\0', (char)220, '\0'};
-			mvwprintw(winTrack, 3,3, switches[0] ? cross : straight);
+			mvwprintw(winTrack, 3,3, switches[0] ? cross : straight); // 1
 			mvwprintw(winTrack, 3,5, switches[0] ? (cross+6) : (straight+6) );
 			mvwprintw(winTrack, 5,3, switches[0] ? (cross+4) : (straight+4) );
 			mvwprintw(winTrack, 5,5, switches[0] ? (cross+2) : (straight+2) );
 			
-			mvwprintw(winTrack, 3,18, switches[4] ? cross : straight);
+			mvwprintw(winTrack, 3,18, switches[4] ? cross : straight); // 5
 			mvwprintw(winTrack, 3,20, switches[4] ? (cross+6) : (straight+6));
 			mvwprintw(winTrack, 5,18, switches[4] ? (cross+4) : (straight+4));
 			mvwprintw(winTrack, 5,20, switches[4] ? (cross+2) : (straight+2));
 			
-			mvwprintw(winTrack, 5,9, switches[1] ? (cross) : (straight));
+			mvwprintw(winTrack, 5,9, switches[1] ? (cross) : (straight)); // 2
 			mvwprintw(winTrack, 5,11, switches[1] ? (cross+6) : (straight+6));
 			mvwprintw(winTrack, 7,9, switches[1] ? (cross+4) : (straight+4));
 			mvwprintw(winTrack, 7,11, switches[1] ? (cross+8) : (straight+8));
 			
-			mvwprintw(winTrack, 5,24, switches[5] ? (cross) : (straight));
-			mvwprintw(winTrack, 5,26, switches[5] ? (cross+6) : (straight+6));
-			mvwprintw(winTrack, 7,24, switches[5] ? (cross+4) : (straight+4));
-			mvwprintw(winTrack, 7,26, switches[5] ? (cross+2) : (straight+2));
+			mvwprintw(winTrack, 5,24, switches[6] ? (cross) : (straight)); // 7
+			mvwprintw(winTrack, 5,26, switches[6] ? (cross+6) : (straight+6));
+			mvwprintw(winTrack, 7,24, switches[6] ? (cross+4) : (straight+4));
+			mvwprintw(winTrack, 7,26, switches[6] ? (cross+2) : (straight+2));
 
-			mvwprintw(winTrack, 1,13, switches[3] ? (cross) : (straight));
-			mvwprintw(winTrack, 7,10, switches[2] ? (cross+10) : (straight+10));
-			mvwprintw(winTrack, 1,28, switches[7] ? (cross+6) : (straight + 6));
-			mvwprintw(winTrack, 7,23, switches[6] ? (cross+6) : (straight+6));
+			mvwprintw(winTrack, 1,13, switches[3] ? (cross) : (straight)); //4
+			mvwprintw(winTrack, 7,10, switches[2] ? (cross+10) : (straight+10));//3
+			mvwprintw(winTrack, 1,28, switches[7] ? (cross+6) : (straight + 6));//6
+			mvwprintw(winTrack, 7,23, switches[5] ? (cross+6) : (straight+6));//8
 			wrefresh(winSensors);
 			wrefresh(winSwitch);
 			wrefresh(winTrack);
@@ -145,12 +103,16 @@ namespace SLDP
 		{
 			Destroy();
 		}
+
+		
+		bool frozen;
 	private:
 		TaskHandle readHandle;
 		std::vector<TaskHandle> writeHandles;
 
 		float64 values[12];
 		bool switches[8];
+
 
 		WINDOW* winSwitch;
 		WINDOW* winSensors;

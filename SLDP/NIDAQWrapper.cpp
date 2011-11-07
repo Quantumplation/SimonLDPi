@@ -1,4 +1,6 @@
 #include "NIDAQWrapper.h"
+#include "Edge.h"
+#include "Node.h"
 
 namespace SLDP
 {
@@ -7,7 +9,7 @@ namespace SLDP
 		int32       read=0;
 		float64     data[120] = {0};
 
-		Read(taskHandle, data, 10, 12);
+//		Read(taskHandle, data, 10, 12);
 
 		NIDAQWrapper* wrapper = (NIDAQWrapper*)callbackData;
 
@@ -21,7 +23,8 @@ namespace SLDP
 			avg /= 10;
 			wrapper->setValue(x, avg);
 		}
-		wrapper->refreshConsole();
+		if(!wrapper->frozen)
+			wrapper->refreshConsole();
 		return 0;
 	}
 
@@ -132,15 +135,44 @@ namespace SLDP
 
 		return;
 	}
+	
+	void NIDAQWrapper::GetPhysical(Track* track)
+	{
+		std::string labels[] = {"BC", "JK", "LM", "SU", "CD", "CF", "NO", "RU", "GD", "DR1", "PR2", "WR3"};
+		std::string nodeSwitch[] = {"A", "K", "R", "C", "F", "U", "O", "D"};
+		for(int x = 0; x < 12; x++)
+			track->getFirstEdge(labels[x])->setFlags((values[x] > 4) ? SLDP::EDGE_IMPASSABLE : SLDP::EDGE_NONE);
+		for(int x = 0; x < 8; x++)
+			track->getFirstNode(nodeSwitch[x])->setCurrentEdge((x == 5 || x == 7) ? LEFT : RIGHT, switches[x] ? 1 : 0);
+	}
+	void NIDAQWrapper::MeHearYourBodyTalk(Track* track)
+	{
+		std::string nodeSwitch[] = {"A", "K", "R", "C", "F", "U", "O", "D"};
+		for(int x = 0; x < 8; x++)
+			if(track->getFirstNode(nodeSwitch[x])->edgeNotDefault((x == 5 || x == 7) ? LEFT : RIGHT))
+				PulseSwitch(x+1, true);
+			else
+				PulseSwitch(x+1, false);
+	}
 
 	void NIDAQWrapper::PulseSwitch(int Sector, bool Cross)
 	{
 		if(Sector < 0 || Sector > 8)
 			return;
+		if(Sector == 7 || Sector == 8)
+		{
+			// Cludgey workaround for their labelling
+			Sector = (Sector == 7) ? 8 : 7;
+		}
 		int port = Sector > 4;
 		int channel = ((Sector-1)%4)*2 + Cross;
 		Pulse(writeHandles[port], port, channel, winLog);
-		switches[Sector] = Cross;
+		if(Sector == 7 || Sector == 8)
+		{
+			//Cludgey workaround for their labelling
+			Sector = (Sector == 7) ? 8 : 7;
+		}
+		switches[Sector-1] = Cross;
 	}
 
 	void NIDAQWrapper::Destroy()
