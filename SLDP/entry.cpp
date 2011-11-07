@@ -32,6 +32,9 @@ string translate(const string& input)
 
 int main()
 {
+	SLDP::NIDAQWrapper wrapper;
+	wrapper.Initialize();
+
 	bool NIDAQ = false;
 	SLDP::Track t;
 	t.loadFromFile("input.xml");

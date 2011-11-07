@@ -2,7 +2,8 @@
 #include "../include/panel.h"
 #include <stdio.h>
 #include <signal.h>
-#include <string.h>
+#include <string>
+#include <sstream>
 #include <stdlib.h>
 #include <time.h>
 #include <direct.h>
@@ -10,13 +11,10 @@
 
 int CALLBACK WinMain( __in  HINSTANCE hInstance, __in  HINSTANCE hPrevInstance, __in  LPSTR lpCmdLine, __in  int nCmdShow )
 {
-    WINDOW *winSensors, *winLog, *winSwitch, *winTrack;
-    chtype save[80], ch;
-    int width, height, w, x, y, i, j, seed;
-
+    WINDOW *winSensors, *winLogBox, *winLog, *winSwitch, *winTrack;
 
     initscr();
-	resize_term(25,66);
+	resize_term(20,46);
 		
     start_color();
 
@@ -34,63 +32,59 @@ int CALLBACK WinMain( __in  HINSTANCE hInstance, __in  HINSTANCE hPrevInstance, 
 
     /* Create a drawing window */
 
-	winSwitch = newwin(10,33,0,0);
-	winSensors = newwin(5,66,20,0);
-	winLog = newwin(5, 66, 25-5, 0);
-	winTrack = newwin(10, 40, 10, 15);
+	winSwitch = newwin(5,22,10,0);
+	winSensors = newwin(5,22,10,24);
+	winLogBox = newwin(5, 46, 15, 0);
+	winLog = subwin(winLogBox, 3,44,17,1);
+	winTrack = newwin(10, 0, 0, 5);
 
+	scrollok(winLog, true);
 
-	if (winSensors == NULL || winLog == NULL || winSwitch == NULL || winTrack == NULL)
+	if (winSensors == NULL || winLogBox == NULL || winLog == NULL || winSwitch == NULL || winTrack == NULL)
 	{
 		endwin();
 		return 1;
 	}
     
 	init_pair(1, COLOR_WHITE, COLOR_BLUE);
-	init_pair(2, COLOR_BLACK, COLOR_RED);
-	init_pair(3, COLOR_BLUE, COLOR_WHITE);
+	init_pair(2, COLOR_WHITE, COLOR_RED);
 	wbkgd(winSensors, COLOR_PAIR(1));
-	wbkgd(winLog, COLOR_PAIR(2));
 	wbkgd(winSwitch, COLOR_PAIR(1));
+	wbkgd(winLog, COLOR_PAIR(2));
+	wbkgd(winLogBox, COLOR_PAIR(2));
 	werase(winSensors);
 	werase(winLog);
+	werase(winLogBox);
 	werase(winSwitch);
 	werase(winTrack);
 
-	init_pair(4, COLOR_WHITE, COLOR_WHITE);
-	init_pair(5, COLOR_BLUE, COLOR_BLUE);
-	wattrset(winSensors, COLOR_PAIR(4));
-	wattrset(winSwitch, COLOR_PAIR(4));
-	box(winSensors, '-', ' ');
-	box(winLog, ' ', '-');
-	box(winSwitch, '-', ' ');
+	wattrset(winSensors, COLOR_PAIR(1));
+	wattrset(winSwitch, COLOR_PAIR(1));
+	wattrset(winSensors, COLOR_PAIR(1));
+	wattrset(winSwitch, COLOR_PAIR(1));
 
-	init_pair(6, COLOR_RED, COLOR_WHITE);
-	wattrset(winSensors, COLOR_PAIR(6));
-	wattrset(winSwitch, COLOR_PAIR(6));
-	mvwaddstr(winSensors, 0, 1, " Sensors ");
-	mvwaddstr(winSwitch, 0, 1, " Switches ");
-	mvwaddstr(winLog, 0, 1, " Log:  " );
+	mvwaddstr(winSensors, 0, 1, "Sensors");
+	mvwaddstr(winSwitch, 0, 1, "Switches");
+	mvwaddstr(winLogBox, 0, 1, "Log:" );
 
-	init_pair(7, COLOR_WHITE, COLOR_RED);
-	wattrset(winLog, COLOR_PAIR(7));
-	mvwaddstr(winLog, 1, 1, "Acquiring chan Dev1/ai0 named Voltage_0...");
-	mvwaddstr(winLog, 2, 1, "Setting timer...");
-	mvwaddstr(winLog, 3, 1, "Registering continuous sample callbacks...");
+	wattrset(winLog, COLOR_PAIR(2));
+	mvwaddstr(winLog, 2, 0, "Acquiring chan Dev1/ai0 named Voltage_0...");
+	wscrl(winLog, 1);
+	mvwaddstr(winLog, 2, 0, "Setting timer...");
+	wscrl(winLog, 1);
+	mvwaddstr(winLog, 2, 0, "Registering continuous sample callbacks...");	
+	wscrl(winLog, 1);
+	mvwaddstr(winLog, 2, 0, "Doing stuff.");
 
 	wattrset(winSensors, COLOR_PAIR(1));
-	mvwaddstr(winSensors, 2, 2, "A:");	mvwaddstr(winSensors, 2, 18, "B:");
-	mvwaddstr(winSensors, 3, 2, "C:");	mvwaddstr(winSensors, 3, 18, "D:");
-	mvwaddstr(winSensors, 4, 2, "E:");	mvwaddstr(winSensors, 4, 18, "F:");
-	mvwaddstr(winSensors, 5, 2, "G:");	mvwaddstr(winSensors, 5, 18, "H:");
-	mvwaddstr(winSensors, 6, 2, "I:");	mvwaddstr(winSensors, 6, 18, "J:");
-	mvwaddstr(winSensors, 7, 2, "K:");	mvwaddstr(winSensors, 7, 18, "L:");
+	mvwaddstr(winSensors, 2, 1, "A:");	mvwaddstr(winSensors, 2, 6, "B:");  mvwaddstr(winSensors, 2, 11, "C:");	mvwaddstr(winSensors, 2, 16, "D:"); 
+	mvwaddstr(winSensors, 3, 1, "E:");	mvwaddstr(winSensors, 3, 6, "F:");	mvwaddstr(winSensors, 3, 11, "G:");	mvwaddstr(winSensors, 3, 16, "H:");	
+	mvwaddstr(winSensors, 4, 1, "I:");	mvwaddstr(winSensors, 4, 6, "J:");	mvwaddstr(winSensors, 4, 11, "K:");	mvwaddstr(winSensors, 4, 16, "L:");
 
 	wattrset(winSwitch, COLOR_PAIR(1));
-	mvwaddstr(winSwitch, 3, 2, "1:   Cross");	mvwaddstr(winSwitch, 3, 17, "2:   Cross");
-	mvwaddstr(winSwitch, 4, 2, "3:   Straight");mvwaddstr(winSwitch, 4, 17, "4:   Cross");
-	mvwaddstr(winSwitch, 5, 2, "5:   Cross");	mvwaddstr(winSwitch, 5, 17, "6:   Straight");
-	mvwaddstr(winSwitch, 6, 2, "7:   Corss");	mvwaddstr(winSwitch, 6, 17, "8:   Straight");
+	mvwaddstr(winSwitch, 2, 1, "1:");	mvwaddstr(winSwitch, 2, 8, "2:");	mvwaddstr(winSwitch, 2, 15, "3:");
+	mvwaddstr(winSwitch, 3, 1, "4:");	mvwaddstr(winSwitch, 3, 8, "5:");	mvwaddstr(winSwitch, 3, 15, "6:");	
+	mvwaddstr(winSwitch, 4, 1, "7:");	mvwaddstr(winSwitch, 4, 8, "8:");
 
 	char t[] ={
 				  (char)32,//EMPTY	:	0
@@ -136,7 +130,7 @@ int CALLBACK WinMain( __in  HINSTANCE hInstance, __in  HINSTANCE hPrevInstance, 
 				  (char)215,//DFTC  :   40
 				  (char)216,//URBRC :   41
 				  (char)217,//SLOPEN:   42
-				  (char)216,//SCLOSE:   43
+				  (char)218,//SCLOSE:   43
 			     };
 
 	char trackSymbolsTwo[] = "░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬";
@@ -157,9 +151,19 @@ int CALLBACK WinMain( __in  HINSTANCE hInstance, __in  HINSTANCE hPrevInstance, 
 
 	mvwaddstr(winTrack, 0,0, track);
 	wrefresh(winSensors);
+	wrefresh(winLogBox);
 	wrefresh(winLog);
 	wrefresh(winSwitch);
 	wrefresh(winTrack);
-	getch();
+	int index = 0;
+	std::stringstream ss;
+	while(getch())
+	{
+		ss << index++;
+		wscrl(winLog, 1);
+		mvwaddstr(winLog, 2, 0, ss.str().c_str());
+		ss = std::stringstream("");
+		wrefresh(winLog);
+	}
 	endwin();
 }

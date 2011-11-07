@@ -1,4 +1,6 @@
 #include <vector>
+#include "Redirect.h"
+#include "NIDAQWrapper.h"
 #include "Win32++\wincore.h"
 #include "GUIBase.h"
 #include "GUITrack.h"
@@ -13,6 +15,7 @@ class CView : public CWnd
 {
 public:
 	CView() : nodeToLabel(NULL) {
+
 		GUINode *L1, *L2, *L3;
 		GUINode *Empty1, *Empty2;
 		GUINode *One1, *One2, *Empty3, *Empty4, *One3, *One4;
@@ -104,7 +107,7 @@ public:
 		EDGE(Six, Seven3);
 		EDGE(Seven4, Empty8);
 		EDGE(Empty8, Empty9);
-		EDGE(Empty9, R3);
+		EDGE(Empty9, R3); // Dear god this is so ugly.
 	}
 	virtual ~CView() {}
 	virtual LRESULT WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -156,6 +159,8 @@ private:
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR nCmdLine, int nCmdShow)
 {
+	NIDAQWrapper wrapper;
+	wrapper.Initialize();
 	MyApp myApp;
 	return myApp.Run();
 }

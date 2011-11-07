@@ -12,6 +12,11 @@ void print(WINDOW* w, const char* str)
 		wscrl(w, -1);
 		mvwaddstr(w, 0, 0, str);
 	}
+//	else
+	{
+		printf(str);
+		printf("\n");
+	}
 }
 
 NDAPI TaskHandle GetTask(const char* taskName, WINDOW* w)
@@ -23,7 +28,7 @@ NDAPI TaskHandle GetTask(const char* taskName, WINDOW* w)
 	return handle;
 }
 
-NDAPI void StartTask(TaskHandle handle, DAQmxEveryNSamplesEventCallbackPtr callback, WINDOW* w)
+NDAPI void StartTask(TaskHandle handle, DAQmxEveryNSamplesEventCallbackPtr callback, void* callbackData, WINDOW* w)
 {
 	int error;
 
@@ -32,7 +37,7 @@ NDAPI void StartTask(TaskHandle handle, DAQmxEveryNSamplesEventCallbackPtr callb
 		print(w,"Setting timer...");
 		DAQmxErrChkVoid(DAQmxCfgSampClkTiming(handle,"",100.0,DAQmx_Val_Rising,DAQmx_Val_ContSamps,0));
 		print(w,"Registering continuous sample callbacks...");
-		DAQmxErrChkVoid(DAQmxRegisterEveryNSamplesEvent(handle,DAQmx_Val_Acquired_Into_Buffer,10,0,callback,NULL));
+		DAQmxErrChkVoid(DAQmxRegisterEveryNSamplesEvent(handle,DAQmx_Val_Acquired_Into_Buffer,10,0,callback,callbackData));
 	}
 
 	print(w,"Starting task...");
@@ -57,7 +62,7 @@ NDAPI void GetReadChannel(TaskHandle handle, const char* name, int chan, WINDOW*
 	}
 	
 	char* output = new char[1024];
-	sprintf(output, "Acquiring %s with name %s", chanStr, name);
+	sprintf(output, "Acquiring %s name %s", chanStr, name);
 	print(w,output);
 	DAQmxErrChk(DAQmxCreateAIVoltageChan(handle, chanStr, name, DAQmx_Val_Cfg_Default, -10, 10, DAQmx_Val_Volts, NULL));
 	delete chanStr;
@@ -73,11 +78,20 @@ NDAPI void GetWriteChannel(TaskHandle handle, const char* name, int channel, WIN
 	chanStr[9] = '0' + channel;
 
 	char* output = new char[1024];
-	sprintf(output, "Acquiring %s with name %s", chanStr, name);
+	sprintf(output, "Acquiring %s name %s", chanStr, name);
 	print(w,output);
 	DAQmxErrChk(DAQmxCreateDOChan(handle, chanStr, name, DAQmx_Val_ChanForAllLines));
 	delete chanStr;
 	delete output;
+}
+
+NDAPI int Read(TaskHandle handle, float64* data, int sampsPerChan, int numSamps)
+{
+	int32       error=0;
+	int32       read=0;
+
+	DAQmxErrChk(DAQmxReadAnalogF64(handle,sampsPerChan,1.0,DAQmx_Val_GroupByChannel,data,numSamps*sampsPerChan,&read,NULL));
+	return read;
 }
 
 NDAPI void Pulse(TaskHandle handle, unsigned port, unsigned chan, WINDOW* w)
