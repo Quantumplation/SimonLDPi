@@ -5,13 +5,21 @@ using namespace std;
 namespace SLDP
 {
 	GUINode::GUINode()
-		: GUIBase(0, 0, 16, 16) {}
+		: GUIBase(0, 0, 16, 16),
+		leftConstraints(NULL), rightConstraints(NULL),
+		leftSwitched(false), rightSwitched(false) {}
 	GUINode::GUINode(long x, long y)
-		: GUIBase(x - 8, y - 8, 16, 16) {}
+		: GUIBase(x - 8, y - 8, 16, 16),
+		leftConstraints(NULL), rightConstraints(NULL),
+		leftSwitched(false), rightSwitched(false) {}
 	GUINode::GUINode(long x, long y, const string& newLabel)
-		: GUIBase(x - 8, y - 8, 16, 16, newLabel) {}
+		: GUIBase(x - 8, y - 8, 16, 16, newLabel),
+		leftConstraints(NULL), rightConstraints(NULL),
+		leftSwitched(false), rightSwitched(false) {}
 	GUINode::GUINode(POINT p)
-		: GUIBase(p.x - 8, p.y - 8, 16, 16) {}
+		: GUIBase(p.x - 8, p.y - 8, 16, 16),
+		leftConstraints(NULL), rightConstraints(NULL),
+		leftSwitched(false), rightSwitched(false) {}
 	bool GUINode::connectsTo(const GUINode* other) const
 	{
 		for (size_t i = 0; i < max(myLeftEdges.size(), myRightEdges.size()); ++i)
@@ -22,6 +30,32 @@ namespace SLDP
 				return true;
 		}
 		return false;
+	}
+	bool GUINode::isSwitchedLeft() const { return leftSwitched; }
+	bool GUINode::isSwitchedRight() const { return rightSwitched; }
+	bool GUINode::isSwitchableLeft() const { return (myLeftEdges.size() > 1); }
+	bool GUINode::isSwitchableRight() const { return (myRightEdges.size() > 1); }
+	void GUINode::setSwitchedLeft(bool isSwitched)
+	{
+		if (leftConstraints)
+			leftConstraints->switchAll(isSwitched);
+		else
+		{
+			leftSwitched = isSwitched;
+			myLeftEdges[0]->setVisible(!isSwitched);
+			myLeftEdges[1]->setVisible(isSwitched);
+		}
+	}
+	void GUINode::setSwitchedRight(bool isSwitched)
+	{
+		if (rightConstraints)
+			rightConstraints->switchAll(isSwitched);
+		else
+		{
+			rightSwitched = isSwitched;
+			myRightEdges[0]->setVisible(!isSwitched);
+			myRightEdges[1]->setVisible(isSwitched);
+		}
 	}
 	void GUINode::markForDeletion()
 	{
@@ -42,6 +76,10 @@ namespace SLDP
 			other->removeEdge(temp);
 			temp->markForDeletion();
 		}
+		if (leftConstraints)
+			leftConstraints->markForDeletion();
+		if (rightConstraints)
+			rightConstraints->markForDeletion();
 	}
 	void GUINode::addEdge(GUIEdge* newEdge)
 	{
@@ -68,9 +106,17 @@ namespace SLDP
 			}
 		}
 	}
-	void GUINode::draw(CDC context) const
+	void GUINode::draw(CDC& context) const
 	{
-		context.Ellipse(getLeft(), getTop(), getRight(), getBottom());
-		drawLabel(context, 0, 8);
+		//if (!leftConstraints && !rightConstraints)
+		{
+			context.Ellipse(getMask());
+			drawLabel(context, 0, -24);
+		}
 	}
+
+	vector<GUIEdge*>& GUINode::getLeftEdges() { return myLeftEdges; }
+	vector<GUIEdge*>& GUINode::getRightEdges() { return myRightEdges; }
+	GUISwitch* GUINode::getLeftSwitch() { return leftConstraints; }
+	GUISwitch* GUINode::getRightSwitch() { return rightConstraints; }
 }

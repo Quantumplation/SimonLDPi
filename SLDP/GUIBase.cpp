@@ -6,7 +6,7 @@ using namespace std;
 namespace SLDP
 {
 	GUIBase::GUIBase() : wRadius(0), hRadius(0), deleteThis(false),
-		relabeling(false), label(new wchar_t[10]), labelSize(0)
+		relabeling(false), label(new wchar_t[10]), labelSize(0), showLabel(true)
 	{
 		mask.left = 0;
 		mask.right = 0;
@@ -15,7 +15,7 @@ namespace SLDP
 	}
 	GUIBase::GUIBase(long x, long y, long width, long height)
 		: wRadius(width / 2), hRadius(height / 2), deleteThis(false),
-		  relabeling(false), label(new wchar_t[10]), labelSize(0)
+		  relabeling(false), label(new wchar_t[10]), labelSize(0), showLabel(true)
 	{
 		mask.left = x;
 		mask.right = x + width;
@@ -25,7 +25,7 @@ namespace SLDP
 	}
 	GUIBase::GUIBase(long x, long y, long width, long height, const string& newLabel)
 		: wRadius(width / 2), hRadius(height / 2), deleteThis(false),
-		relabeling(false), label(new wchar_t[10])
+		relabeling(false), label(new wchar_t[10]), showLabel(true)
 	{
 		mask.left = x;
 		mask.right = x + width;
@@ -43,6 +43,8 @@ namespace SLDP
 	long GUIBase::getRight() const { return mask.right; }
 	long GUIBase::getTop() const { return mask.top; }
 	long GUIBase::getBottom() const { return mask.bottom; }
+	long GUIBase::getWidth() const { return mask.right - mask.left; }
+	long GUIBase::getHeight() const { return mask.bottom - mask.top; }
 	RECT GUIBase::getMask() const { return mask; }
 	bool GUIBase::readyToDelete() const { return deleteThis; }
 	void GUIBase::setLocation(long x, long y)
@@ -94,15 +96,20 @@ namespace SLDP
 			label[--labelSize] = '|';
 	}
 
-	void GUIBase::drawLabel(CDC context, long shiftX, long shiftY) const
+	void GUIBase::drawLabel(CDC& context, long shiftX, long shiftY) const
 	{
-		if (relabeling)
-			context.TextOutW(getX() - labelSize * 4 + shiftX, getY() + shiftY, label, labelSize + 1);
-		else
-			context.TextOutW(getX() - labelSize * 4 + shiftX, getY() + shiftY, label);
+		if(showLabel)
+		{
+			if (relabeling)
+				context.TextOutW(getX() - labelSize * 4 + shiftX, getY() + shiftY, label, labelSize + 1);
+			else
+				context.TextOutW(getX() - labelSize * 4 + shiftX, getY() + shiftY, label);
+		}
 	}
 	void GUIBase::markForDeletion()
 	{
 		deleteThis = true;
 	}
+	void GUIBase::SetLabelVisible(bool val) { showLabel = val; }
+	bool GUIBase::GetLabelVisible() { return showLabel; }
 }

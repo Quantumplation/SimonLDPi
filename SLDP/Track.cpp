@@ -221,6 +221,8 @@ namespace SLDP
 			{
 				string label(elem->Attribute("label"));
 				NodeFlags flags = parseNodeFlags(elem->Attribute("flags"));
+				if(label == "" || flags == NODE_NONE)
+					continue;
 				nodes.push_back(new Node(label, flags));
 			}
 		}

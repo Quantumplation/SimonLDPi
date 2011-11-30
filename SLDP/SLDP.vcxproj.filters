@@ -46,8 +46,10 @@
     <ClCompile Include="GUIButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NIDAQWrapper.cpp" />
     <ClCompile Include="Redirect.cpp" />
+    <ClCompile Include="GUISwitch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constraint.h">
@@ -176,8 +178,10 @@
     <ClInclude Include="GUIButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NIDAQWrapper.h" />
     <ClInclude Include="Redirect.h" />
+    <ClInclude Include="GUISwitch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="input.xml" />

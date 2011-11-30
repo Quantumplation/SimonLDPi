@@ -54,10 +54,10 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>pdcurses.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Programming\SimonLDPi\lib;C:\Programming\SimonLDPi\lib\msvc;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\MyPrograms\SimonLDPi\lib;C:\MyPrograms\SimonLDPi\lib\msvc</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -91,11 +91,11 @@
     <ClCompile Include="entry.cpp" />
     <ClCompile Include="GUIButton.cpp" />
     <ClCompile Include="GUIEdge.cpp" />
+    <ClCompile Include="GUISwitch.cpp" />
     <ClCompile Include="GUITrack.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GUINode.cpp" />
     <ClCompile Include="NaiveStrategy.cpp" />
-    <ClCompile Include="NIDAQWrapper.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Redirect.cpp" />
     <ClCompile Include="Track.cpp" />
@@ -110,9 +110,9 @@
     <ClInclude Include="GUIButton.h" />
     <ClInclude Include="GUIEdge.h" />
     <ClInclude Include="GUINode.h" />
+    <ClInclude Include="GUISwitch.h" />
     <ClInclude Include="GUITrack.h" />
     <ClInclude Include="NaiveStrategy.h" />
-    <ClInclude Include="NIDAQWrapper.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Redirect.h" />
     <ClInclude Include="Strategy.h" />
@@ -150,16 +150,6 @@
     <None Include="input.xml">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NIDAQInterface\NIDAQInterface.vcxproj">
-      <Project>{c222b6b0-dbe9-4832-847d-5d6104af814e}</Project>
-      <Private>true</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
