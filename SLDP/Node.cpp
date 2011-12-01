@@ -1,6 +1,7 @@
 #include "Node.h"
 #include "Edge.h"
 #include "Constraint.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -21,6 +22,16 @@ namespace SLDP
 	bool Node::edgeNotDefault(Direction d) const
 	{
 		return outbounds.at(d).currentSelection != 0;
+	}
+
+	Direction Node::getDirection(Edge* e) const
+	{
+		for(std::map<Direction, Node::Outbounds>::const_iterator it = outbounds.begin(); it != outbounds.end(); it++)
+		{
+			if(find(it->second.edges.begin(), it->second.edges.end(), e) != it->second.edges.end())
+				return it->first;
+		}
+		return NONE;
 	}
 
 	vector<Edge*> Node::getAllEdges(Direction d) const
@@ -141,13 +152,29 @@ namespace SLDP
 		for(size_t x = 0; x < o.edges.size(); ++x)
 		{
 			if(o.edges[x] == &edge)
+			{
 				setCurrentEdge(d, x);
+				return;
+			}
 		}
 	}
 
 	void Node::_setCurrentEdge(Direction d, int index)
 	{
 		outbounds.at(d).currentSelection = index;
+	}
+
+	void Node::setCurrentEdge(Direction d, const string& label)
+	{
+		Outbounds o = outbounds.at(d);
+		for(size_t x = 0; x < o.edges.size(); ++x)
+		{
+			if(o.edges[x]->getLabel() == label)
+			{
+				setCurrentEdge(d, x);
+				return;
+			}
+		}
 	}
 
 	void Node::addEdge(Edge& e, Direction d)
@@ -165,6 +192,11 @@ namespace SLDP
 	void Node::addConstraint(Constraint* c)
 	{
 		constraints.push_back(c);
+	}
+
+	bool Node::hasConstraints() const
+	{
+		return (constraints.size() != 0);
 	}
 
 	bool Node::removeEdge(Edge& e, Direction d)

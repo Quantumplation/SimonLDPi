@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <vector>
@@ -44,6 +45,8 @@ namespace SLDP
 		int getCurrentEdgeIndex(Direction d) const;
 		bool edgeNotDefault(Direction d) const;
 
+		Direction getDirection(Edge* e) const;
+
 		std::vector<Edge*> getAllEdges(Direction d) const;
 		std::vector<Edge*> getAllEdges(Direction d, EdgeFlags e) const;
 		std::vector<Edge*> getEdgesExact(int flags) const;
@@ -57,11 +60,13 @@ namespace SLDP
 		// DON'T USE
 		void _setCurrentEdge(Direction d, int index);
 		void setCurrentEdge(Direction d, const Edge& e);
+		void setCurrentEdge(Direction d, const std::string& label);
 		
 		void addEdge(Edge& e, Direction d);
 		void makeEdge(Node& end, EdgeFlags flags, Direction d, const std::string& label, double weight = 1);
 
 		void addConstraint(Constraint* c);
+		bool hasConstraints() const;
 
 		bool removeEdge(Edge& e, Direction d);
 		bool removeEdge(Edge& e);

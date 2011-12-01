@@ -44,12 +44,12 @@ namespace SLDP
 	protected:
 		virtual void OnChange(Node* node)
 		{
-			bool element;
+			bool element = false;
 			int currentEdge;
 
 			for(size_t x = 0; x < nodes.size(); ++x)
 			{
-				if(nodes[x].n == node)
+				if(nodes[x].n->getLabel() == node->getLabel())
 				{
 					element = true;
 					currentEdge = node->getCurrentEdgeIndex(nodes[x].d);
@@ -61,7 +61,7 @@ namespace SLDP
 			{
 				for(size_t x = 0; x < nodes.size(); ++x)
 				{
-					if(nodes[x].n != node)
+					if(nodes[x].n->getLabel() != node->getLabel())
 					{
 						nodes[x].n->_setCurrentEdge(nodes[x].d, currentEdge);
 					}

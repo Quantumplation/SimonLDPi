@@ -2,6 +2,13 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SLDP", "SLDP\SLDP.vcxproj", "{DCD3CDF6-C2C1-4A67-BB14-5FF026EF28BD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C222B6B0-DBE9-4832-847D-5D6104AF814E} = {C222B6B0-DBE9-4832-847D-5D6104AF814E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NIDAQInterface", "NIDAQInterface\NIDAQInterface.vcxproj", "{C222B6B0-DBE9-4832-847D-5D6104AF814E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NCURSESTEST", "NCURSESTEST\NCURSESTEST.vcxproj", "{6A7A8FC9-E198-412E-A16B-D879310267A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +20,14 @@ Global
 		{DCD3CDF6-C2C1-4A67-BB14-5FF026EF28BD}.Debug|Win32.Build.0 = Debug|Win32
 		{DCD3CDF6-C2C1-4A67-BB14-5FF026EF28BD}.Release|Win32.ActiveCfg = Release|Win32
 		{DCD3CDF6-C2C1-4A67-BB14-5FF026EF28BD}.Release|Win32.Build.0 = Release|Win32
+		{C222B6B0-DBE9-4832-847D-5D6104AF814E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C222B6B0-DBE9-4832-847D-5D6104AF814E}.Debug|Win32.Build.0 = Debug|Win32
+		{C222B6B0-DBE9-4832-847D-5D6104AF814E}.Release|Win32.ActiveCfg = Release|Win32
+		{C222B6B0-DBE9-4832-847D-5D6104AF814E}.Release|Win32.Build.0 = Release|Win32
+		{6A7A8FC9-E198-412E-A16B-D879310267A0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6A7A8FC9-E198-412E-A16B-D879310267A0}.Debug|Win32.Build.0 = Debug|Win32
+		{6A7A8FC9-E198-412E-A16B-D879310267A0}.Release|Win32.ActiveCfg = Release|Win32
+		{6A7A8FC9-E198-412E-A16B-D879310267A0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

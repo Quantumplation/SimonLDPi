@@ -7,9 +7,9 @@ namespace SLDP
 {
 	Node* Edge::follow(const Node* const start) const
 	{
-		if(start == nodeA)
+		if(start->getLabel() == nodeA->getLabel())
 			return nodeB;
-		if(start == nodeB)
+		if(start->getLabel() == nodeB->getLabel())
 			return nodeA;
 		return NULL;
 	}

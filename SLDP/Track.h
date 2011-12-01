@@ -5,6 +5,9 @@
 
 namespace SLDP
 {
+	enum NodeFlags;
+	enum Direction;
+	enum EdgeFlags;
 	class Node;
 	class Edge;
 
@@ -31,4 +34,8 @@ namespace SLDP
 	private:
 		std::vector<Node*> nodes;
 	};
+
+	NodeFlags parseNodeFlags(const std::string& flag);
+	Direction parseDirection(const std::string& flag);
+	EdgeFlags parseEdgeFlags(const std::string& flag);
 }

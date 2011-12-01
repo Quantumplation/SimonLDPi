@@ -1,0 +1,146 @@
+<?xml version="1.0" ?>
+<Track>
+    <Nodes>
+        <Node label="L1" x="50" y="150" flags="NODE_TERMINAL">
+            <Edge label="L1A" direction="RIGHT" flags="EDGE_NONE" endpoint="A" />
+        </Node>
+        <Node label="L2" x="50" y="250" flags="NODE_TERMINAL">
+            <Edge label="L2I" direction="RIGHT" flags="EDGE_NONE" endpoint="I" />
+        </Node>
+        <Node label="L3" x="50" y="400" flags="NODE_TERMINAL">
+            <Edge label="L3EMPTY1" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY1" />
+        </Node>
+        <Node label="EMPTY1" x="150" y="400" flags="NODE_NONE">
+            <Edge label="EMPTY1EMPTY2" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY2" />
+        </Node>
+        <Node label="EMPTY2" x="250" y="350" flags="NODE_NONE">
+            <Edge label="EMPTY2Q" direction="RIGHT" flags="EDGE_NONE" endpoint="Q" />
+        </Node>
+        <Node label="A" x="150" y="150" flags="NODE_NONE">
+            <Constraint type="CurrentEdge" direction="RIGHT" label="One">
+                <Element direction="LEFT" node="B" />
+                <Element direction="RIGHT" node="I" />
+                <Element direction="LEFT" node="J" />
+            </Constraint>
+            <Edge label="AB" direction="RIGHT" flags="EDGE_NONE" endpoint="B" />
+            <Edge label="AJ" direction="RIGHT" flags="EDGE_NONE" endpoint="J" />
+        </Node>
+        <Node label="B" x="250" y="150" flags="NODE_NONE">
+            <Edge label="A" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY3" />
+        </Node>
+        <Node label="EMPTY3" x="350" y="150" flags="NODE_NONE">
+            <Edge label="EMPTY3EMPTY4" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY4" />
+        </Node>
+        <Node label="EMPTY4" x="400" y="50" flags="NODE_NONE">
+            <Edge label="EMPTY4Four" direction="RIGHT" flags="EDGE_NONE" endpoint="Four" />
+        </Node>
+        <Node label="I" x="150" y="250" flags="NODE_NONE">
+            <Edge label="IJ" direction="RIGHT" flags="EDGE_NONE" endpoint="J" />
+            <Edge label="IB" direction="RIGHT" flags="EDGE_NONE" endpoint="B" />
+        </Node>
+        <Node label="J" x="250" y="250" flags="NODE_NONE">
+            <Edge label="B" direction="RIGHT" flags="EDGE_NONE" endpoint="K" />
+        </Node>
+        <Node label="K" x="350" y="250" flags="NODE_NONE">
+            <Constraint type="CurrentEdge" direction="RIGHT" label="Two">
+                <Element direction="LEFT" node="L" />
+                <Element direction="RIGHT" node="Q" />
+                <Element direction="LEFT" node="S" />
+            </Constraint>
+            <Edge label="KL" direction="RIGHT" flags="EDGE_NONE" endpoint="L" />
+            <Edge label="KS" direction="RIGHT" flags="EDGE_NONE" endpoint="S" />
+        </Node>
+        <Node label="L" x="450" y="250" flags="NODE_NONE">
+            <Edge label="C" direction="RIGHT" flags="EDGE_NONE" endpoint="M" />
+        </Node>
+        <Node label="Q" x="350" y="350" flags="NODE_NONE">
+            <Edge label="QThree" direction="RIGHT" flags="EDGE_NONE" endpoint="Three" />
+            <Edge label="QL" direction="RIGHT" flags="EDGE_NONE" endpoint="L" />
+        </Node>
+        <Node label="S" x="450" y="350" flags="NODE_NONE">
+            <Edge label="D" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY12" />
+        </Node>
+        <Node label="EMPTY12" x="600" y="350" flags="NODE_NONE">
+            <Edge label="EMPTY12Six" direction="RIGHT" flags="EDGE_NONE" endpoint="Six" />
+        </Node>
+        <Node label="Three" x="400" y="350" flags="NODE_SWITCH">
+            <Edge label="RS" direction="RIGHT" flags="EDGE_NONE" endpoint="S" />
+            <Edge label="REMPTY5" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY5" />
+        </Node>
+        <Node label="EMPTY5" x="450" y="400" flags="NODE_NONE">
+            <Edge label="H" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY6" />
+        </Node>
+        <Node label="EMPTY6" x="650" y="400" flags="NODE_NONE">
+            <Edge label="EMPTY6Six" direction="RIGHT" flags="EDGE_NONE" endpoint="Six" />
+        </Node>
+        <Node label="Four" x="450" y="50" flags="NODE_SWITCH">
+            <Edge label="FourEMPTY19" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY19" />
+            <Edge label="FourEMPTY11" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY11" />
+        </Node>
+        <Node label="EMPTY19" x="550" y="50" flags="NODE_NONE">
+            <Edge label="E" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY10" />
+        </Node>
+        <Node label="EMPTY10" x="800" y="50" flags="NODE_NONE">
+            <Edge label="EMPTY10Eight" direction="RIGHT" flags="EDGE_NONE" endpoint="Eight" />
+        </Node>
+        <Node label="EMPTY11" x="500" y="150" flags="NODE_NONE">
+            <Edge label="F" direction="RIGHT" flags="EDGE_NONE" endpoint="F" />
+        </Node>
+        <Node label="F" x="550" y="150" flags="NODE_NONE">
+            <Constraint type="CurrentEdge" direction="RIGHT" label="Five">
+                <Element direction="LEFT" node="G" />
+                <Element direction="RIGHT" node="M" />
+                <Element direction="LEFT" node="N" />
+            </Constraint>
+            <Edge label="FG" direction="RIGHT" flags="EDGE_NONE" endpoint="G" />
+            <Edge label="FN" direction="RIGHT" flags="EDGE_NONE" endpoint="N" />
+        </Node>
+        <Node label="G" x="650" y="150" flags="NODE_NONE">
+            <Edge label="I" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY7" />
+        </Node>
+        <Node label="M" x="550" y="250" flags="NODE_NONE">
+            <Edge label="MN" direction="RIGHT" flags="EDGE_NONE" endpoint="N" />
+            <Edge label="MG" direction="RIGHT" flags="EDGE_NONE" endpoint="G" />
+        </Node>
+        <Node label="N" x="650" y="250" flags="NODE_NONE">
+            <Edge label="G" direction="RIGHT" flags="EDGE_NONE" endpoint="O" />
+        </Node>
+        <Node label="Six" x="700" y="350" flags="NODE_SWITCH">
+            <Edge label="UV" direction="RIGHT" flags="EDGE_NONE" endpoint="V" />
+        </Node>
+        <Node label="O" x="750" y="250" flags="NODE_NONE">
+            <Constraint type="CurrentEdge" direction="RIGHT" label="Seven">
+                <Element direction="LEFT" node="P" />
+                <Element direction="RIGHT" node="V" />
+                <Element direction="LEFT" node="W" />
+            </Constraint>
+            <Edge label="OP" direction="RIGHT" flags="EDGE_NONE" endpoint="P" />
+            <Edge label="OW" direction="RIGHT" flags="EDGE_NONE" endpoint="W" />
+        </Node>
+        <Node label="P" x="850" y="250" flags="NODE_NONE">
+            <Edge label="K" direction="RIGHT" flags="EDGE_NONE" endpoint="R2" />
+        </Node>
+        <Node label="V" x="750" y="350" flags="NODE_NONE">
+            <Edge label="VW" direction="RIGHT" flags="EDGE_NONE" endpoint="W" />
+            <Edge label="VP" direction="RIGHT" flags="EDGE_NONE" endpoint="P" />
+        </Node>
+        <Node label="W" x="850" y="350" flags="NODE_NONE">
+            <Edge label="WEMPTY8" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY8" />
+        </Node>
+        <Node label="EMPTY7" x="850" y="150" flags="NODE_NONE">
+            <Edge label="EMPTY7Eight" direction="RIGHT" flags="EDGE_NONE" endpoint="Eight" />
+        </Node>
+        <Node label="Eight" x="900" y="50" flags="NODE_SWITCH">
+            <Edge label="J" direction="RIGHT" flags="EDGE_NONE" endpoint="R1" />
+        </Node>
+        <Node label="R1" x="1050" y="50" flags="NODE_TERMINAL" />
+        <Node label="R2" x="1050" y="250" flags="NODE_TERMINAL" />
+        <Node label="EMPTY8" x="900" y="350" flags="NODE_NONE">
+            <Edge label="L" direction="RIGHT" flags="EDGE_NONE" endpoint="EMPTY9" />
+        </Node>
+        <Node label="EMPTY9" x="1000" y="400" flags="NODE_NONE">
+            <Edge label="EMPTY9R3" direction="RIGHT" flags="EDGE_NONE" endpoint="R3" />
+        </Node>
+        <Node label="R3" x="1050" y="400" flags="NODE_TERMINAL" />
+    </Nodes>
+</Track>

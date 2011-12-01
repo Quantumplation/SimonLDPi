@@ -4,6 +4,7 @@
 
 namespace SLDP
 {
+
 	class Node;
 	enum NodeFlags;
 	enum EdgeFlags
@@ -23,7 +24,8 @@ namespace SLDP
 			  flags(flags), 
 			  label(label), 
 			  weight(weight) 
-		{}
+		{
+		}
 
 		Node* follow(const Node* const start) const;
 		

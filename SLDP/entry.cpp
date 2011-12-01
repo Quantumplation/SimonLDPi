@@ -1,8 +1,9 @@
-#include "../include/NIDAQmx.h"
-
+//#include "../include/NIDAQmx.h"
+#include "NIDAQWrapper.h"
 #include <map>
 #include <climits>
 #include <iostream> // REMOVE THIS
+#include <Windows.h>
 #include <string>
 #include <vector>
 #include "Track.h"
@@ -10,7 +11,11 @@
 #include "Node.h"
 #include "NaiveStrategy.h"
 #include "DijkstraStrategy.h"
+#include "../include/curses.h"
 using namespace std;
+
+#define PHYSICAL &t
+#define YOUR_BODY_TALK &t
 
 string translate(const string& input)
 {
@@ -26,95 +31,82 @@ string translate(const string& input)
 	if (input == "J" || input == "j") return "DR1";
 	if (input == "K" || input == "k") return "PR2";
 	if (input == "L" || input == "l") return "WR3";
+	if (input == "NIDAQ" || input == "nidaq") return "NIDAQ";
 	return "";
 }
 
 int main()
 {
-	if(true)
+	SLDP::NIDAQWrapper lets;
+	SLDP::NIDAQWrapper* let = &lets;
+	lets.Initialize();
+
+	bool NIDAQ = false;
+	SLDP::Track t;
+	t.loadFromFile("input.xml");
+	while(true)
 	{
-		SLDP::Track t;
-		t.loadFromFile("input.xml");
-		while(true)
+		string input;
+		cout << "Enter an obstacle (letters A through L): ";
+		cin >> input;
+		if (translate(input) == "") break;
+		if (translate(input) == "NIDAQ")
 		{
-			string input;
-			cout << "Enter an obstacle (letters A through L): ";
-			cin >> input;
-			if (translate(input) == "") break;
-			t.getFirstEdge(translate(input))->setFlags(SLDP::EDGE_IMPASSABLE);
-			t.getFirstEdge(translate(input))->setWeight(numeric_limits<double>::max());
+			NIDAQ = true;
+			break;
 		}
-		string track;
-		cout << "Starting track (1, 2, or 3): ";
-		cin >> track;
-		if (track == "1" || track == "l1") track = "L1";
-		if (track == "2" || track == "l2") track = "L2";
-		if (track == "3" || track == "l3") track = "L3";
-		if (track != "L1" && track != "L2" && track != "L3")
-		{
-			cout << "You probably thought this was going to work.  Nope, Chuck Testa!\n";
-			track = "L1";
-		}
-		string mode;
-		cout << "Normal or Reverse? ";
-		cin >> mode;
-		vector<string> ends;
-		ends.push_back("R1");
-		ends.push_back("R2");
-		ends.push_back("R3");
-		SLDP::DijkstraStrategy ds(track, ends);
-		ds.Execute(&t);
-
-		//SLDP::NaiveStrategy* ns;
-		//if (mode == "Normal" || mode == "normal" || mode == "N" || mode == "n")	ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
-		//else if (mode == "Reverse" || mode == "reverse" || mode == "R" || mode == "r") ns = new SLDP::NaiveStrategy(SLDP::REVERSE, track);
-		//else
-		//{
-		//	cout << "Fuck you, it's normal.";
-		//	ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
-		//}
-		//if (ns->Execute(&t))
-		//	cout << "\nNo Path\n";
-		//else
-		//{
-		//	cout << "\nSuccess!\n";
-		//	for (size_t i = 0; i < 15; ++i) { cout << "X"; }
-		//	cout << "\nX Switch 1: " << t.getFirstNode("A")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-		//	cout << "X Switch 2: " << t.getFirstNode("K")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-		//	cout << "X Switch 3: " << t.getFirstNode("R")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-		//	cout << "X Switch 4: " << t.getFirstNode("C")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-		//	cout << "X Switch 5: " << t.getFirstNode("F")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-		//	cout << "X Switch 6: " << t.getFirstNode("U")->edgeNotDefault(SLDP::LEFT) << " X\n";
-		//	cout << "X Switch 7: " << t.getFirstNode("O")->edgeNotDefault(SLDP::RIGHT) << " X\n";
-		//	cout << "X Switch 8: " << t.getFirstNode("D")->edgeNotDefault(SLDP::LEFT) << " X\n";
-		//	for (size_t i = 0; i < 15; ++i) { cout << "X"; }
-		//	cout << endl;
-		//}
+		t.getFirstEdge(translate(input))->setFlags(SLDP::EDGE_IMPASSABLE);
 	}
-	/*
-	map<string, bool> vars;
-
-	bool output = ( vars["L"] || vars["K"] ) && vars["M"];
-
-
-
-	vector<Edge*> impassable = track.getEdges(EdgeFlags::IMPASSABLE);
-	for(size_t x = 0; x < impassable.size(); ++x)
+	if (NIDAQ)
 	{
-		vars[ impassable[x]->getLabel() ] = true;
+		string s;
+		cout << "Press enter to lock in the values..." << endl;
+		getline(cin, s);
+		getline(cin, s);
+		lets.GetPhysical(PHYSICAL);
+		lets.frozen = true;
 	}
-
-	vector<Edge*> passable = track.getEdges(EdgeFlags::PASSABLE);
-	for(size_t x = 0; x < passable.size(); ++x)
+	string track;
+	cout << "Starting track (L1, L2, L3, R1, R2, or R3): ";
+	cin >> track;
+	if (track[0] == 'l') track[0] = 'L';
+	if (track[0] == 'r') track[0] = 'R';
+	if ((track[0] != 'L' && track[0] != 'R') || (track[1] != '1' && track[1] != '2' && track[1] != '3'))
 	{
-		vars[ passable[x]->getLabel() ] = false;
+		cout << "You probably thought this was going to work.  Nope, Chuck Testa!\n";
+		track = "L1";
 	}
-
-	bool s1 = vars["L"] || vars["K"] && vars["M"];
-	bool s2 = vars["L"];
-
-	track.getNodes("S1")->setDestination("S3");
-	track.getNodes("S2")->setDestination("S4");
-	*/
+	string mode;
+	cout << "Normal or Reverse? ";
+	cin >> mode;
+	SLDP::NaiveStrategy* ns;
+	if (mode == "Normal" || mode == "normal" || mode == "N" || mode == "n")	ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
+	else if (mode == "Reverse" || mode == "reverse" || mode == "R" || mode == "r") ns = new SLDP::NaiveStrategy(SLDP::REVERSE, track);
+	else
+	{
+		cout << "Fuck you, it's normal.";
+		ns = new SLDP::NaiveStrategy(SLDP::NORMAL, track);
+	}
+	if (ns->Execute(&t))
+		cout << "\nNo Path\n";
+	else
+	{
+		cout << "\nSuccess!\n";
+		for (size_t i = 0; i < 15; ++i) { cout << "X"; }
+		cout << "\nX Switch 1: " << t.getFirstNode("A")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		cout << "X Switch 2: " << t.getFirstNode("K")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		cout << "X Switch 3: " << t.getFirstNode("R")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		cout << "X Switch 4: " << t.getFirstNode("C")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		cout << "X Switch 5: " << t.getFirstNode("F")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		cout << "X Switch 6: " << t.getFirstNode("U")->edgeNotDefault(SLDP::LEFT) << " X\n";
+		cout << "X Switch 7: " << t.getFirstNode("O")->edgeNotDefault(SLDP::RIGHT) << " X\n";
+		cout << "X Switch 8: " << t.getFirstNode("D")->edgeNotDefault(SLDP::LEFT) << " X\n";
+		for (size_t i = 0; i < 15; ++i) { cout << "X"; }
+		cout << endl;
+		let->MeHearYourBodyTalk(YOUR_BODY_TALK);
+		let->frozen = false;
+	}
+	string s;
+	cin >> s;
 	return 0;
 }

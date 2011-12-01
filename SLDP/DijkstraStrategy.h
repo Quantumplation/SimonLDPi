@@ -7,9 +7,9 @@ namespace SLDP
 	template<typename T>
 	struct DijkstraDecorator : public T
 	{
-		DijkstraDecorator(const T& original) : T(original) {}
+		DijkstraDecorator(const T& original) : T(original), accumulatedCost(INT_MAX), previous(NULL) {}
 
-		int accumulatedCost;
+		double accumulatedCost;
 		DijkstraDecorator<T>* previous;
 	private:
 	};
