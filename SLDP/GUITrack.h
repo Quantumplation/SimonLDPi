@@ -29,6 +29,8 @@ namespace SLDP
 		void saveToFile(const std::string& filename);
 
 		GUINode* getFirstNode(const std::string& label);
+		std::vector<GUIEdge*> getEdges() { return edges; }
+		std::vector<GUISwitch*> getSwitches() { return switches; }
 	private:
 		std::vector<GUINode*> nodes;
 		std::vector<GUISwitch*> switches;

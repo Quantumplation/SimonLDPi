@@ -1,6 +1,6 @@
 #include <vector>
 //#include "Redirect.h"
-//#include "NIDAQWrapper.h"
+#include "NIDAQWrapper.h"
 #include <cstdio>
 #include "Win32++\wincore.h"
 #include "GUIBase.h"
@@ -21,11 +21,13 @@ public:
 	{
 		track.loadFromFile("input.xml");
 		track.saveToFile("junk.xml");
+		wrapper = new NIDAQWrapper();
+		wrapper->Initialize();
 		mode = NORMAL;
 		buttons.push_back(new ModeButton(340, 455, 125, 50, &track));
 		buttons.push_back(new TrainModeButton(340, 504, 125, 50, &mode));
-		buttons.push_back(new ReadButton(490, 455, 125, 50, &track));
-		buttons.push_back(new WriteButton(490, 504, 125, 50, &track));
+		buttons.push_back(new ReadButton(490, 455, 125, 50, &track, wrapper));
+		buttons.push_back(new WriteButton(490, 504, 125, 50, &track, wrapper));
 		buttons.push_back(new SaveButton(640, 455, 125, 50, &track));
 		buttons.push_back(new LoadButton(640, 504, 125, 50, &track));
 		buttons.push_back(new TrainStartButton(25, 175, 125, 50, &track, &mode, track.getFirstNode("L1")));
@@ -51,6 +53,7 @@ public:
 
 
 private:
+	NIDAQWrapper* wrapper;
 	GUITrack track;
 	POINT lastMouseClick;
 	POINT lastMousePos;

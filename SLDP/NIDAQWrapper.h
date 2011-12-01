@@ -2,6 +2,7 @@
 #include "../include/curses.h"
 #include "../NIDAQInterface/src/nidaq.h"
 #include "Track.h"
+#include "GUITrack.h"
 #include <windows.h>
 #include <iostream>
 #include <vector>
@@ -34,6 +35,9 @@ namespace SLDP
 
 		void GetPhysical(Track* track); // GET PHYSICAL, PHYSICAL
 		void MeHearYourBodyTalk(Track* track);
+
+		void GetPhysical(GUITrack* track);
+		void MeHearYourBodyTalk(GUITrack* track);
 
 		void PulseSwitch(int Sector, bool Cross);
 

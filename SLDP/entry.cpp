@@ -1,5 +1,5 @@
 //#include "../include/NIDAQmx.h"
-//#include "NIDAQWrapper.h"
+#include "NIDAQWrapper.h"
 #include <map>
 #include <Windows.h>
 #include <iostream>
@@ -35,9 +35,9 @@ string translate(const string& input)
 
 int main()
 {
-//	SLDP::NIDAQWrapper lets;
-//	SLDP::NIDAQWrapper* let = &lets;
-//	lets.Initialize();
+	SLDP::NIDAQWrapper lets;
+	SLDP::NIDAQWrapper* let = &lets;
+	lets.Initialize();
 
 	bool NIDAQ = false;
 	SLDP::Track t;
@@ -61,8 +61,8 @@ int main()
 		cout << "Press enter to lock in the values..." << endl;
 		getline(cin, s);
 		getline(cin, s);
-//		lets.GetPhysical(PHYSICAL);
-//		lets.frozen = true;
+		lets.GetPhysical(PHYSICAL);
+		lets.frozen = true;
 	}
 	string track;
 	cout << "Starting track (L1, L2, L3, R1, R2, or R3): ";
@@ -101,8 +101,8 @@ int main()
 		cout << "X Switch 8: " << t.getFirstNode("D")->edgeNotDefault(SLDP::LEFT) << " X\n";
 		for (size_t i = 0; i < 15; ++i) { cout << "X"; }
 		cout << endl;
-//		let->MeHearYourBodyTalk(YOUR_BODY_TALK);
-//		let->frozen = false;
+		let->MeHearYourBodyTalk(YOUR_BODY_TALK);
+		let->frozen = false;
 	}
 	string s;
 	cin >> s;

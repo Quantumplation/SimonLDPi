@@ -1,4 +1,5 @@
 #include <string>
+#include "NIDAQWrapper.h"
 #include "GUIButton.h"
 #include "GUITrack.h"
 #include "Strategy.h"
@@ -26,20 +27,20 @@ namespace SLDP
 		setLabel(track->getMode() ? "Modify Mode" : "Run Mode");
 	}
 
-	ReadButton::ReadButton(long x, long y, long width, long height, GUITrack* track)
-		: GUIButton(x, y, width, height, "Read From DAQ", track) {}
+	ReadButton::ReadButton(long x, long y, long width, long height, GUITrack* track, NIDAQWrapper* wrapper)
+		: GUIButton(x, y, width, height, "Read From DAQ", track), wrapper(wrapper) {}
 
 	void ReadButton::onClick()
 	{
-		
+		wrapper->GetPhysical(track);
 	}
 
-	WriteButton::WriteButton(long x, long y, long width, long height, GUITrack* track)
-		: GUIButton(x, y, width, height, "Write To DAQ", track) {}
+	WriteButton::WriteButton(long x, long y, long width, long height, GUITrack* track, NIDAQWrapper* wrapper)
+		: GUIButton(x, y, width, height, "Write To DAQ", track), wrapper(wrapper) {}
 
 	void WriteButton::onClick()
 	{
-		
+		wrapper->MeHearYourBodyTalk(track);
 	}
 
 	SaveButton::SaveButton(long x, long y, long width, long height, GUITrack* track)
@@ -47,7 +48,7 @@ namespace SLDP
 
 	void SaveButton::onClick()
 	{
-		
+		track->saveToFile("input.xml");
 	}
 
 	LoadButton::LoadButton(long x, long y, long width, long height, GUITrack* track)
@@ -55,7 +56,7 @@ namespace SLDP
 
 	void LoadButton::onClick()
 	{
-		
+		track->loadFromFile("input.xml");
 	}
 
 	TrainModeButton::TrainModeButton(long x, long y, long width, long height, TrainMode* mode)

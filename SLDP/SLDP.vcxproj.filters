@@ -50,6 +50,9 @@
     <ClCompile Include="GUISwitch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NIDAQWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constraint.h">
@@ -180,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="Redirect.h" />
     <ClInclude Include="GUISwitch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NIDAQWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

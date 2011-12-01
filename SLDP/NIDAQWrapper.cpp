@@ -9,7 +9,7 @@ namespace SLDP
 		int32       read=0;
 		float64     data[120] = {0};
 
-//		Read(taskHandle, data, 10, 12);
+		Read(taskHandle, data, 10, 12);
 
 		NIDAQWrapper* wrapper = (NIDAQWrapper*)callbackData;
 
@@ -135,11 +135,11 @@ namespace SLDP
 
 		return;
 	}
-	
+
 	void NIDAQWrapper::GetPhysical(Track* track)
-	{
-		std::string labels[] = {"BC", "JK", "LM", "SU", "CD", "CF", "NO", "RU", "GD", "DR1", "PR2", "WR3"};
-		std::string nodeSwitch[] = {"A", "K", "R", "C", "F", "U", "O", "D"};
+	{		
+		std::string labels[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
+		std::string nodeSwitch[] = {"One", "Two", "R", "C", "Five", "U", "Seven", "D"};
 		for(int x = 0; x < 12; x++)
 			track->getFirstEdge(labels[x])->setFlags((values[x] > 4) ? SLDP::EDGE_IMPASSABLE : SLDP::EDGE_NONE);
 		for(int x = 0; x < 8; x++)
@@ -147,13 +147,68 @@ namespace SLDP
 	}
 	void NIDAQWrapper::MeHearYourBodyTalk(Track* track)
 	{
-		std::string nodeSwitch[] = {"A", "K", "R", "C", "F", "U", "O", "D"};
+		std::string nodeSwitch[] = {"One", "Two", "R", "C", "Five", "U", "Seven", "D"};
 		for(int x = 0; x < 8; x++)
 			if(track->getFirstNode(nodeSwitch[x])->edgeNotDefault((x == 5 || x == 7) ? LEFT : RIGHT))
 				PulseSwitch(x+1, true);
 			else
 				PulseSwitch(x+1, false);
 	}
+
+	void NIDAQWrapper::GetPhysical(GUITrack* track)
+	{
+		std::string labels[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
+		std::string nodeSwitch[] = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"};
+		std::vector<GUIEdge*> edges = track->getEdges();
+		for(int x = 0; x < 12; x++)
+		{
+			for(size_t y = 0; y < edges.size(); y++)
+			{
+				if(edges[y]->getLabel() == labels[x] && ((edges[y]->isBlocked() && values[x] < 4) || !edges[y]->isBlocked() && values[x] > 4)) edges[y]->alterBlocked();
+			}
+		}
+		std::vector<GUISwitch*> guiswitches = track->getSwitches();
+		for(int x = 0; x < 8; x++)
+		{
+			if(x == 2 || x == 3 || x == 5 || x == 7)
+			{
+				if(track->getFirstNode(nodeSwitch[x])->isSwitchableLeft()) track->getFirstNode(nodeSwitch[x])->setSwitchedLeft(switches[x]);
+				if(track->getFirstNode(nodeSwitch[x])->isSwitchableRight()) track->getFirstNode(nodeSwitch[x])->setSwitchedRight(switches[x]);
+			}
+			else
+			{
+				for(size_t y = 0; y < guiswitches.size(); y++)
+				{
+					if(guiswitches[y]->getLabel() == nodeSwitch[x]) guiswitches[y]->switchAll(switches[x]);
+				}
+			}
+		}
+	}
+	void NIDAQWrapper::MeHearYourBodyTalk(GUITrack* track)
+	{
+		std::string nodeSwitch[] = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"};
+		std::vector<GUISwitch*> guiswitches = track->getSwitches();
+		for(int x = 0; x < 8; x++)
+		{
+			if(x == 2 || x == 3 || x == 5 || x == 7)
+			{
+				if(track->getFirstNode(nodeSwitch[x])->isSwitchableLeft()) PulseSwitch(x+1, track->getFirstNode(nodeSwitch[x])->isSwitchedLeft());
+				if(track->getFirstNode(nodeSwitch[x])->isSwitchableRight()) PulseSwitch(x+1, track->getFirstNode(nodeSwitch[x])->isSwitchedRight());
+			}
+			else
+			{
+				for(size_t y = 0; y < guiswitches.size(); y++)
+				{
+					if(guiswitches[y]->getLabel() == nodeSwitch[x])
+					{
+						PulseSwitch(x+1, guiswitches[y]->getNodes()[0]->isSwitchedRight());
+					}
+				}
+			}
+		}
+	}
+
+
 
 	void NIDAQWrapper::PulseSwitch(int Sector, bool Cross)
 	{

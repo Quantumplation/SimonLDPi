@@ -7,6 +7,7 @@
 namespace SLDP
 {
 	class GUITrack;
+	class NIDAQWrapper;
 	class GUIButton : public GUIBase
 	{
 	public:
@@ -27,15 +28,19 @@ namespace SLDP
 	class ReadButton : public GUIButton
 	{
 	public:
-		ReadButton(long x, long y, long width, long height, GUITrack* track);
+		ReadButton(long x, long y, long width, long height, GUITrack* track, NIDAQWrapper* wrapper);
 		void onClick();
+	private:
+		NIDAQWrapper* wrapper;
 	};
 
 	class WriteButton : public GUIButton
 	{
 	public:
-		WriteButton(long x, long y, long width, long height, GUITrack* track);
+		WriteButton(long x, long y, long width, long height, GUITrack* track, NIDAQWrapper* wrapper);
 		void onClick();
+	private:
+		NIDAQWrapper* wrapper;
 	};
 
 	class SaveButton : public GUIButton
