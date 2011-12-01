@@ -21,6 +21,7 @@ namespace SLDP
 		bool isSwitchedRight() const;
 		bool isSwitchableLeft() const;
 		bool isSwitchableRight() const;
+		bool hasConstraints() const;
 		void setSwitchedLeft(bool isSwitched);
 		void setSwitchedRight(bool isSwitched);
 		void markForDeletion();

@@ -35,6 +35,7 @@ namespace SLDP
 	bool GUINode::isSwitchedRight() const { return rightSwitched; }
 	bool GUINode::isSwitchableLeft() const { return (myLeftEdges.size() > 1); }
 	bool GUINode::isSwitchableRight() const { return (myRightEdges.size() > 1); }
+	bool GUINode::hasConstraints() const { return (leftConstraints || rightConstraints); }
 	void GUINode::setSwitchedLeft(bool isSwitched)
 	{
 		if (leftConstraints)

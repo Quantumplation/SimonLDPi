@@ -9,7 +9,7 @@ using namespace std;
 namespace SLDP
 {
 	GUITrack::GUITrack()
-		: startNode(NULL), endNode(NULL), objectToLabel(NULL), setToModify(false) {}
+		: startNode(NULL), endNode(NULL), objectToLabel(NULL), setToModify(false), noPath(false) {}
 	void GUITrack::leftPressed(POINT p)
 	{
 		if (!setToModify)
@@ -339,9 +339,11 @@ namespace SLDP
 			switches[i]->draw(context);
 		for (size_t i = 0; i < nodes.size(); ++i)
 			nodes[i]->draw(context);
+		context.TextOutW(32, 32, noPath ? L"No Path" : L"Path");
 	}
 
 	void GUITrack::setMode(bool modify) { setToModify = modify; }
+	void GUITrack::setNopath(bool result) { noPath = result; }
 	bool GUITrack::getMode() const { return setToModify; }
 
 	void GUITrack::modifyTrack(Track& track) const
@@ -350,6 +352,28 @@ namespace SLDP
 		{
 			Edge* edge = track.getFirstEdge(edges[i]->getLabel());
 			edge->setFlags(edges[i]->isBlocked() ? EDGE_IMPASSABLE : EDGE_PASSABLE);
+		}
+	}
+
+	void GUITrack::readFromTrack(Track& track)
+	{
+		for(size_t x = 0; x < switches.size(); ++x)
+		{
+			Node* n = track.getFirstNode(switches[x]->getNodes()[0]->getLabel());
+			switches[x]->getNodes()[0]->setSwitchedRight(n->edgeNotDefault(RIGHT));
+		}
+
+		vector<Node*> switchNodes = track.getNodesAll(NODE_SWITCH);
+		for(size_t x = 0; x < switchNodes.size(); ++x)
+		{
+			if(!switchNodes[x]->hasConstraints())
+			{
+				GUINode* matchingNode = getFirstNode(switchNodes[x]->getLabel());
+				if (matchingNode->isSwitchableLeft())
+					matchingNode->setSwitchedLeft(switchNodes[x]->edgeNotDefault(LEFT));
+				if (matchingNode->isSwitchableRight())
+					matchingNode->setSwitchedRight(switchNodes[x]->edgeNotDefault(RIGHT));
+			}
 		}
 	}
 
