@@ -21,8 +21,10 @@ namespace SLDP
 		void addSwitch(GUINode* left1, GUINode* right1, GUINode* left2, GUINode* right2, const std::string& label);
 		void draw(CDC& context) const;
 		void setMode(bool modify);
+		void setNopath(bool result);
 		bool getMode() const;
 		void modifyTrack(Track& track) const;
+		void readFromTrack(Track& track);
 		void loadFromFile(const std::string& filename);
 		void saveToFile(const std::string& filename);
 
@@ -35,6 +37,7 @@ namespace SLDP
 		GUINode* endNode;
 		GUIBase* objectToLabel;
 		bool setToModify;
+		bool noPath;
 	};
 };
 

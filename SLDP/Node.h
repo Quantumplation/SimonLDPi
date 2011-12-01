@@ -61,6 +61,7 @@ namespace SLDP
 		void makeEdge(Node& end, EdgeFlags flags, Direction d, const std::string& label, double weight = 1);
 
 		void addConstraint(Constraint* c);
+		bool hasConstraints() const;
 
 		bool removeEdge(Edge& e, Direction d);
 		bool removeEdge(Edge& e);

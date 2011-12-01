@@ -167,6 +167,11 @@ namespace SLDP
 		constraints.push_back(c);
 	}
 
+	bool Node::hasConstraints() const
+	{
+		return (constraints.size() != 0);
+	}
+
 	bool Node::removeEdge(Edge& e, Direction d)
 	{
 		Outbounds o = outbounds.at(d);
